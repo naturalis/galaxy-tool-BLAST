@@ -1,0 +1,69 @@
+<tool id="blastn" name="Identify reads with blastn and find taxonomy">
+<description>blastn wrapper and taxonomy finder</description>
+<command interpreter="bash">
+blastn.sh
+    $input_type.type
+    $input_type.input
+    $database
+    $task
+    $max_target_seqs
+    $blast_output
+    $log_output
+</command>
+    <macros>
+	<macro name="zip_file_input_macro">
+		<param format="zip" name="input" type="data" label="zip file containing fasta"/>
+	</macro>
+        <macro name="fasta_file_input_macro">
+		<param format="fasta" name="input" type="data" label="fasta file"/>
+	</macro>
+</macros>
+    <inputs>
+					<conditional name="input_type">
+					<param name="type" type="select" multiple="false" label="Input type">
+					<option value="zip">zip</option>
+					<option value="fasta" selected="true">fasta</option>
+				    </param>
+					<when value="zip">
+						<expand macro="zip_file_input_macro"/>
+					</when>
+					<when value="fasta">
+						<expand macro="fasta_file_input_macro"/>
+					</when>
+				</conditional>
+
+                <param name="database" type="select" multiple="true" label="Database">
+                    <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1.fa">CO1 (Genbank 04-06-2018)</option>
+				</param>
+
+        <param name="task" type="select" multiple="false" label="Task">
+					<option value="blastn">blastn</option>
+					<option value="megablast" selected="true">megablast</option>
+				</param>
+        <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
+
+
+
+</inputs>
+
+
+<outputs>
+    <data format="tabular" type="data" name="blast_output" label="$input_type.input.display_name BLAST" />
+    <data format="text" type="data" name="log_output" label="$input_type.input.display_name log" />
+    <!--
+	<data format="fasta" type="data" name="blast_output" label="$input.display_name BLAST">
+		<filter>input_type['type'] == "fasta"</filter>
+	</data>
+    <data format="zip" type="data" name="blast_output" label="$input.display_name BLAST zip">
+		<filter>input_type['type'] == "zip"</filter>
+	</data>-->
+</outputs>
+<tests>
+<test>
+<param name="test_input" value="test_input.txt"/>
+<output name="test_outout" file="test_output.txt"/>
+</test>
+</tests>
+<help>
+</help>
+</tool>

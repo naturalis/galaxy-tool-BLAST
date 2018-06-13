@@ -1,5 +1,5 @@
-
 #!/usr/bin/python
+
 """
 blastn_wrapper   V1.0    martenhoogeveen@naturalis.nl
 """
@@ -33,9 +33,9 @@ def make_output_folders():
     Output en work folders are created. The wrapper uses these folders to save the files that are used between steps.
     args.out_folder contains the path of the output folder
     """
-    call(["mkdir", "-p", args.out_folder])
-    call(["mkdir", args.out_folder + "/files"])
-    call(["mkdir", args.out_folder + "/fasta"])
+    call(["mkdir", "-p", args.out_folder.strip()])
+    call(["mkdir", args.out_folder.strip() + "/files"])
+    call(["mkdir", args.out_folder.strip() + "/fasta"])
 
 def unpack_or_cp():
     if args.input_type == "zip":
@@ -54,16 +54,16 @@ def check_if_fasta(file):
         return False
 
 def extension_check_and_rename():
-    files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder + "/fasta/*"))]
+    files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*"))]
     for x in files:
-        if check_if_fasta(args.out_folder + "/fasta/" + x):
+        if check_if_fasta(args.out_folder.strip() + "/fasta/" + x):
             fastafile = os.path.splitext(x)[0].translate((string.maketrans("-. ", "___"))) + ".fa"
             if x != fastafile:
-                call((["mv", args.out_folder + "/fasta/" + x, args.out_folder + "/fasta/" + fastafile]))
+                call((["mv", args.out_folder.strip() + "/fasta/" + x, args.out_folder.strip() + "/fasta/" + fastafile]))
         else:
             admin_log(error="Problems with fasta file, file will be ignored: " + x,function="extension_check")
-            call(["rm", args.out_folder + "/fasta/" + x])
-    if not os.listdir(args.out_folder + "/fasta/"):
+            call(["rm", args.out_folder.strip() + "/fasta/" + x])
+    if not os.listdir(args.out_folder.strip() + "/fasta/"):
         admin_log(error="No fasta file found", function="extension_check")
         sys.exit("No fasta file found")
 
@@ -73,9 +73,9 @@ def file_count_check(files):
         sys.exit("Something went wrong, multiple fasta files found")
 
 def create_blast_command(query, output_name):
-    base_command = ["ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database, "-task", args.task,
-                    "-max_target_seqs", args.max_target_seqs, "-num_threads", "2", "-out",
-                    args.out_folder + "/files/" + output_name, "-outfmt",
+    base_command = ["blastn", "-query", query, "-db", args.blast_database.strip(), "-task", args.task.strip(),
+                    "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-out",
+                    args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt",
                     "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"]
     if args.taxidlist:
         base_command = base_command + ["-taxidlist", args.taxidlist]
@@ -84,17 +84,16 @@ def create_blast_command(query, output_name):
 
 
 def blast_fasta():
-    files = [x for x in sorted(glob.glob(args.out_folder + "/fasta/*.fa"))]
+    files = [x for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*.fa"))]
     #just an extra check
     file_count_check(files)
-    output_name = "blast_"+os.path.splitext(os.path.basename(x))[0]+".tabular"
     for query in files:
+        output_name = "blast_" + os.path.splitext(os.path.basename(query))[0] + ".tabular"
+        print output_name
         blast_command = create_blast_command(query, output_name)
         blast_out, blast_error = Popen(blast_command, stdout=PIPE,stderr=PIPE).communicate()
         admin_log(blast_out, blast_error, "blasting:"+str(query))
 
-def blast_zip():
-    print "zip blast"
 def main():
     make_output_folders()
     unpack_or_cp()
