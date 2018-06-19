@@ -73,11 +73,16 @@ def file_count_check(files):
         sys.exit("Something went wrong, multiple fasta files found")
 
 def create_blast_command(query, output_name):
-    base_command = ["blastn", "-query", query, "-db", args.blast_database.strip(), "-task", args.task.strip(),
+    if args.outfmt.strip() == "custom_taxonomy":
+        outformat = "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"
+    else:
+        outformat = args.outfmt.strip()
+
+    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip(), "-task", args.task.strip(),
                     "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-out",
                     args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt",
-                    "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"]
-    if args.taxidlist:
+                    outformat]
+    if args.taxidlist and args.taxidlist.strip() != "none":
         base_command = base_command + ["-taxidlist", args.taxidlist]
         admin_log(out="taxonomy filter used:" + str(args.taxidlist), error=None, function="blast")
     return base_command
@@ -88,11 +93,11 @@ def blast_fasta():
     #just an extra check
     file_count_check(files)
     for query in files:
+        admin_log(out="BLAST: blasting " +str(os.path.basename(query)), error=None, function="blast")
         output_name = "blast_" + os.path.splitext(os.path.basename(query))[0] + ".tabular"
-        print output_name
         blast_command = create_blast_command(query, output_name)
         blast_out, blast_error = Popen(blast_command, stdout=PIPE,stderr=PIPE).communicate()
-        admin_log(blast_out, blast_error, "blasting:"+str(query))
+        admin_log(blast_out, blast_error, "blasting:"+str(os.path.basename(query)))
 
 def main():
     make_output_folders()

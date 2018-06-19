@@ -7,8 +7,14 @@ blastn.sh
     $database
     $task
     $max_target_seqs
-    $blast_output
+	$taxidlist
+	$output_format.output_format_type
     $log_output
+	#if $input_type.type == "fasta"
+		$blast_output_fasta
+	#elif $input_type.type == "zip"
+		$blast_output_zip
+	#end if
 </command>
     <macros>
 	<macro name="zip_file_input_macro">
@@ -17,6 +23,13 @@ blastn.sh
         <macro name="fasta_file_input_macro">
 		<param format="fasta" name="input" type="data" label="fasta file"/>
 	</macro>
+		<macro name="taxonomy_macro">
+			<param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
+					<option value="ncbi" selected="true">NCBI</option>
+					<option value="gbif">gbif</option>
+			</param>
+	</macro>
+
 </macros>
     <inputs>
 					<conditional name="input_type">
@@ -33,30 +46,58 @@ blastn.sh
 				</conditional>
 
                 <param name="database" type="select" multiple="true" label="Database">
-                    <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1.fa">CO1 (Genbank 04-06-2018)</option>
+                    <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1v5">CO1 (Genbank 04-06-2018)</option>
 				</param>
+				
+		        <param name="taxidlist" type="select" multiple="false" label="ncbi taxonomy filter">
+					<option value="none" selected="true">None</option>
+                    <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/Actinopterygii_taxidlist">Actinopterygii</option>
+				</param>
+
+		<param name="field_component_index" type="select" label="Field component index" dynamic_options="get_field_components_options(taxidlist)" help="" />
 
         <param name="task" type="select" multiple="false" label="Task">
 					<option value="blastn">blastn</option>
 					<option value="megablast" selected="true">megablast</option>
 				</param>
+
+		<conditional name="output_format">
+					<param name="output_format_type" type="select" multiple="false" label="Output format">
+					<option value="custom_taxonomy" selected="true">With taxonomy (Default)</option>
+					<option value="0">Pairwise (can be used with MEGAN)</option>
+					<option value="6">Tabular</option>
+					<option value="8">Text ASN.1</option>
+					<option value="11">BLAST archive format (ASN.1)</option>
+				    </param>
+			        <when value="custom_taxonomy">
+						<expand macro="taxonomy_macro"/>
+					</when>
+				</conditional>
+
         <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
 
-
-
 </inputs>
+	<code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py" />
 
 
 <outputs>
-    <data format="tabular" type="data" name="blast_output" label="$input_type.input.display_name BLAST" />
-    <data format="text" type="data" name="log_output" label="$input_type.input.display_name log" />
-    <!--
-	<data format="fasta" type="data" name="blast_output" label="$input.display_name BLAST">
-		<filter>input_type['type'] == "fasta"</filter>
+	<data format="txt" type="data" name="log_output" label="$input_type.input.display_name log" />
+    <!--<data format="tabular" type="data" name="blast_output" label="$input_type.input.display_name BLAST" />-->
+    <data format="zip" type="data" name="blast_output_zip" label="$input_type.input.display_name BLAST">
+		<filter>input_type['type'] != "fasta"</filter>
 	</data>
-    <data format="zip" type="data" name="blast_output" label="$input.display_name BLAST zip">
-		<filter>input_type['type'] == "zip"</filter>
-	</data>-->
+
+	<data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST">
+		<filter>input_type['type'] == "fasta"</filter>
+		<change_format>
+               <when input="output_format.output_format_type" value="custom_taxonomy" format="tabular"/>
+               <when input="output_format.output_format_type" value="6" format="tabular"/>
+               <when input="output_format.output_format_type" value="8" format="txt"/>
+               <when input="output_format.output_format_type" value="11" format="txt"/>
+      </change_format>
+	</data>
+
+
 </outputs>
 <tests>
 <test>
