@@ -7,6 +7,7 @@
 outlocation=$(mktemp -d /home/galaxy/ExtraRef/XXXXXX)
 blastn_wrapper.py -it $1 -i $2 -db $3 -bt $4 -bm $5 -tl $6 -of $outlocation -outfmt $7
 
+#below the code for moving the files to the galaxy output, when no taxonomy need to be added
 if [ $7 != "custom_taxonomy" ] || [ "${10}" == "none" ]
 then
     if [ $1 == "zip" ]
@@ -15,18 +16,16 @@ then
         mv $outlocation"/log.log" $8
         mv $outlocation"/blast_output.zip" $9
     fi
-
     if [ $1 == "fasta" ]
     then
         mv $outlocation"/log.log" $8
         mv $outlocation'/files/'*'.tabular' $9
-
     fi
 fi
-
+#below the code to call the script to add taxonomy and move the files to the galaxy output
 if [ $7 == "custom_taxonomy" ] || [ "${10}" != "none" ]
 then
-
+    blastn_add_taxonomy.py
 fi
 
 
