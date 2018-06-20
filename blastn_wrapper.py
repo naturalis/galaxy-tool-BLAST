@@ -87,7 +87,6 @@ def create_blast_command(query, output_name):
         admin_log(out="taxonomy filter used:" + str(args.taxidlist), error=None, function="blast")
     return base_command
 
-
 def blast_fasta():
     files = [x for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*.fa"))]
     #just an extra check

@@ -15,6 +15,7 @@
         #elif $input_type.type == "zip"
         $blast_output_zip
         #end if
+        $output_format.taxonomy_method
     </command>
     <macros>
         <macro name="zip_file_input_macro">
