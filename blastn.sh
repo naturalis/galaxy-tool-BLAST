@@ -25,7 +25,18 @@ fi
 #below the code to call the script to add taxonomy and move the files to the galaxy output
 if [ $7 == "custom_taxonomy" ] || [ "${10}" != "none" ]
 then
-    blastn_add_taxonomy.py
+    blastn_add_taxonomy.py -i $outlocation'/files/' -t /home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/rankedlineage.dmp -m /home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/merged.dmp -ts "${10}"
+    if [ $1 == "zip" ]
+    then
+        zip -r -j $outlocation"/blast_output.zip" $outlocation'/files/'taxonomy_*'.tabular' --quiet
+        mv $outlocation"/log.log" $8
+        mv $outlocation"/blast_output.zip" $9
+    fi
+    if [ $1 == "fasta" ]
+    then
+        mv $outlocation"/log.log" $8
+        mv $outlocation'/files/'taxonomy_*'.tabular' $9
+    fi
 fi
 
 
