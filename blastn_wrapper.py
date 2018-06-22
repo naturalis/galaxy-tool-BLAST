@@ -16,6 +16,7 @@ parser.add_argument('-bt', '--blast_task', dest='task', type=str, required=True,
 parser.add_argument('-bm', '--max_target_seqs', dest='max_target_seqs', type=str, required=False, nargs='?', default="1")
 parser.add_argument('-db', '--blast_database', dest='blast_database', type=str, required=True)
 parser.add_argument('-tl', '--taxidlist', dest='taxidlist', type=str, required=False, nargs='?', default="")
+parser.add_argument('-id', '--perc_identity', dest='identity', type=str, required=False, nargs='?', default="0")
 parser.add_argument('-outfmt', '--outfmt', dest='outfmt', type=str, required=False, nargs='?', default="custom_taxonomy", choices=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','custom_taxonomy'])
 
 args = parser.parse_args()
@@ -79,7 +80,7 @@ def create_blast_command(query, output_name):
         outformat = args.outfmt.strip()
     print args.blast_database.strip().replace(","," ")
     base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "), "-task", args.task.strip(),
-                    "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-out",
+                    "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-perc_identity", args.identity, "-out",
                     args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt",
                     outformat]
     if args.taxidlist and args.taxidlist.strip() != "none":

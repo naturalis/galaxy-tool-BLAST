@@ -6,7 +6,7 @@
 
 outlocation=$(mktemp -d /home/galaxy/ExtraRef/XXXXXX)
 echo $3
-blastn_wrapper.py -it $1 -i $2 -db $3 -bt $4 -bm $5 -tl $6 -of $outlocation -outfmt $7
+blastn_wrapper.py -it $1 -i $2 -db $3 -bt $4 -bm $5 -tl $6 -of $outlocation -outfmt $7 -id "${11}"
 
 #below the code for moving the files to the galaxy output, when no taxonomy need to be added
 

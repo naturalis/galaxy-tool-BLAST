@@ -16,6 +16,7 @@
         $blast_output_zip
         #end if
         $output_format.taxonomy_method
+        $identity
     </command>
     <macros>
         <macro name="zip_file_input_macro">
@@ -25,7 +26,12 @@
             <param format="fasta" name="input" type="data" label="fasta file"/>
         </macro>
         <macro name="taxonomy_macro">
-            <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source" dynamic_options="taxonomy_source_list(database)"/>
+            <!--<param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source" dynamic_options="taxonomy_source_list(database)"/>-->
+            <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
+                <option value="none">None</option>
+                <option value="default">Taxonomy of the database from the hit</option>
+                <option value="default" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option>
+            </param>
         </macro>
 
     </macros>
@@ -75,7 +81,7 @@
         </conditional>
 
         <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
-
+        <param name="identity" type="float" label="Identity percentage cutoff"  value="97" min="0.0" max="100"/>
     </inputs>
     <code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py"/>
 
