@@ -5,9 +5,11 @@
 #outlocation=$(mktemp -d /media/GalaxyData/files/XXXXXX)
 
 outlocation=$(mktemp -d /home/galaxy/ExtraRef/XXXXXX)
+echo $3
 blastn_wrapper.py -it $1 -i $2 -db $3 -bt $4 -bm $5 -tl $6 -of $outlocation -outfmt $7
 
 #below the code for moving the files to the galaxy output, when no taxonomy need to be added
+
 if [ $7 != "custom_taxonomy" ] || [ "${10}" == "none" ]
 then
     if [ $1 == "zip" ]
@@ -21,9 +23,8 @@ then
         mv $outlocation"/log.log" $8
         mv $outlocation'/files/'*'.tabular' $9
     fi
-fi
 #below the code to call the script to add taxonomy and move the files to the galaxy output
-if [ $7 == "custom_taxonomy" ] || [ "${10}" != "none" ]
+elif [ $7 == "custom_taxonomy" ] && [ "${10}" != "none" ]
 then
     blastn_add_taxonomy.py -i $outlocation'/files/' -t /home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/rankedlineage.dmp -m /home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/merged.dmp -ts "${10}"
     if [ $1 == "zip" ]
@@ -39,16 +40,4 @@ then
     fi
 fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-rm -rf $outlocation
+#rm -rf $outlocation

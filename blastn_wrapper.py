@@ -77,8 +77,8 @@ def create_blast_command(query, output_name):
         outformat = "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"
     else:
         outformat = args.outfmt.strip()
-
-    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip(), "-task", args.task.strip(),
+    print args.blast_database.strip().replace(","," ")
+    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "), "-task", args.task.strip(),
                     "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-out",
                     args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt",
                     outformat]

@@ -42,7 +42,7 @@ def reference_taxonomy():
 def find_genbank_taxonomy(hit, taxonomyDict, mergedTaxonDict):
     taxid = hit.split("\t")[3]
     if taxid == "N/A":
-        return hit.strip() + "\t" + "unknown kingdom / unknown phylum / unknown class / unknown order / family / genus / species\n"
+        return hit.strip() + "\tGenbank\t" + "unknown kingdom / unknown phylum / unknown class / unknown order / family / genus / species\n"
     else:
         taxonomydb = taxonomyDict
         try:
@@ -54,11 +54,11 @@ def find_genbank_taxonomy(hit, taxonomyDict, mergedTaxonDict):
             superkingdom = taxonomydb[taxid]["superkingdom"]
 
         if kingdom and kingdom != "unknown kingdom":
-            return hit.strip() + "\t" + taxonomydb[taxid]["kingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
+            return hit.strip() + "\tGenbank\t" + taxonomydb[taxid]["kingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
         elif superkingdom and superkingdom != "unknown superkingdom":
-            return hit.strip() + "\t" + taxonomydb[taxid]["superkingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
+            return hit.strip() + "\tGenbank\t" + taxonomydb[taxid]["superkingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
         else:
-            return hit.strip() + "\t" + taxonomydb[taxid]["kingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
+            return hit.strip() + "\tGenbank\t" + taxonomydb[taxid]["kingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
 
 def get_kingdom(species, genus, family):
     if species != "unknown":
@@ -120,9 +120,9 @@ def find_bold_taxonomy(line):
             return line.strip() + "\t" +"something went wrong, more than one record found\n"
         kingdom = get_kingdom(species, genus, family)
         taxonomy = " / ".join([kingdom, phylum, class_taxon, order, family, genus, species])
-        return line.strip() + "\t" + taxonomy+"\n"
+        return line.strip() + "\tBOLD\t" + taxonomy+"\n"
     else:
-        return line.strip() + "\tunknown kingdom / unknown phylum / unknown class / unknown order / unknown family / unknown genus / unknown species\n"
+        return line.strip() +"\tBOLD\tunknown kingdom / unknown phylum / unknown class / unknown order / unknown family / unknown genus / unknown species\n"
 
 def find_gbif_taxonomy(line):
     splitLine = line.split("\t")
@@ -142,12 +142,24 @@ def find_gbif_taxonomy(line):
         for x in a["data"][0]["results"]:
             if x["data_source_title"] not in globalNamesResult:
                 globalNamesResult[x["data_source_title"]] = x
-        if "Catalogue of Life" in globalNamesResult:
-            taxonomy = globalNamesResult["Catalogue of Life"]["classification_path"].replace("|", " / ")
-        elif "GBIF Backbone Taxonomy" in globalNamesResult:
-            taxonomy = globalNamesResult["GBIF Backbone Taxonomy"]["classification_path"].replace("|", " / ")
+        if "GBIF Backbone Taxonomy" in globalNamesResult:
+            taxonomy = globalNamesResult["GBIF Backbone Taxonomy"]["classification_path"].split("|")
+            source = "GBIF"
+            unknown_list = ["unknown kingdom", "unknown phylum", "unknown class", "unknown order", "unknown family", "unknown genus", "unknown species"]
+            for unknown in unknown_list[len(taxonomy):]:
+                taxonomy.append(unknown)
+            taxonomy = " / ".join(taxonomy)
+        elif "Catalogue of Life" in globalNamesResult:
+            taxonomy = globalNamesResult["Catalogue of Life"]["classification_path"].split("|")
+            source = "Catalogue of Life"
+            unknown_list = ["unknown kingdom", "unknown phylum", "unknown class", "unknown order", "unknown family", "unknown genus", "unknown species"]
+            for unknown in unknown_list[len(taxonomy):]:
+                taxonomy.append(unknown)
+            taxonomy = " / ".join(taxonomy)
         else:
+            source = "Original"
             taxonomy = splitLine[-1]
+        splitLine[-2] = source
         splitLine[-1] = taxonomy
         return "\t".join(splitLine)
     else:

@@ -25,11 +25,6 @@
             <param format="fasta" name="input" type="data" label="fasta file"/>
         </macro>
         <macro name="taxonomy_macro">
-            <!--
-            <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
-                <option value="ncbi" selected="true">NCBI</option>
-                <option value="gbif">GBIF</option>
-            </param>-->
             <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source" dynamic_options="taxonomy_source_list(database)"/>
         </macro>
 
@@ -50,7 +45,7 @@
 
         <param name="database" type="select" multiple="true" label="Database">
             <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1v5" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
-            <option value="/home/ubuntu/testmapMarten/test/BOLDv2">BOLD</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
         </param>
 
 
