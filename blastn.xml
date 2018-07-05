@@ -7,7 +7,6 @@
         $database
         $task
         $max_target_seqs
-        $taxidlist
         $output_format.output_format_type
         $log_output
         #if $input_type.type == "fasta"
@@ -15,7 +14,11 @@
         #elif $input_type.type == "zip"
         $blast_output_zip
         #end if
+        #if $output_format.output_format_type == "custom_taxonomy"
         $output_format.taxonomy_method
+        #else
+        "none"
+        #end if
         $identity
     </command>
     <macros>
@@ -26,11 +29,10 @@
             <param format="fasta" name="input" type="data" label="fasta file"/>
         </macro>
         <macro name="taxonomy_macro">
-            <!--<param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source" dynamic_options="taxonomy_source_list(database)"/>-->
             <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
                 <option value="none">None</option>
                 <option value="default">Taxonomy of the database from the hit</option>
-                <option value="default" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option>
+                <option value="GBIF" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option>
             </param>
         </macro>
 
@@ -50,17 +52,13 @@
         </conditional>
 
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1v5" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
             <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM.fas">NLGIM</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM_header.fas">NLGIM_header</option>
         </param>
 
-
-        <param name="taxidlist" type="select" multiple="false" label="ncbi taxonomy filter">
-            <option value="none" selected="true">None</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/Actinopterygii_taxidlist">Actinopterygii</option>
-        </param>
-
-        <param name="taxidlist" type="select" multiple="false" label="NCBI taxonomy filter" dynamic_options="taxon_filter(database)"/>
+        <!--<param name="taxidlist" type="select" multiple="false" label="NCBI taxonomy filter" dynamic_options="taxon_filter(database)"/>-->
 
         <param name="task" type="select" multiple="false" label="Task">
             <option value="blastn">blastn</option>
@@ -98,6 +96,7 @@
                 <when input="output_format.output_format_type" value="custom_taxonomy" format="tabular"/>
                 <when input="output_format.output_format_type" value="6" format="tabular"/>
                 <when input="output_format.output_format_type" value="8" format="txt"/>
+                <when input="output_format.output_format_type" value="0" format="txt"/>
                 <when input="output_format.output_format_type" value="11" format="txt"/>
             </change_format>
         </data>

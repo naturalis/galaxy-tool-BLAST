@@ -79,13 +79,17 @@ def create_blast_command(query, output_name):
     else:
         outformat = args.outfmt.strip()
     print args.blast_database.strip().replace(","," ")
-    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.8.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "), "-task", args.task.strip(),
-                    "-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-perc_identity", args.identity, "-out",
-                    args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt",
-                    outformat]
+    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.6.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "),
+                    "-task", args.task.strip(),"-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-perc_identity", args.identity, "-out", args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt", outformat]
+    #the taxidlist option is not used by galaxy because blast 2.8 is still in alpha version
+    #add a taxonid list parameter to the blast command
     if args.taxidlist and args.taxidlist.strip() != "none":
         base_command = base_command + ["-taxidlist", args.taxidlist]
         admin_log(out="taxonomy filter used:" + str(args.taxidlist), error=None, function="blast")
+    #add the maximum number of blast hits parameter
+
+    #if args.outfmt.strip() in ["custom_taxonomy", "6"]:
+    #"-max_target_seqs", args.max_target_seqs.strip(),
     return base_command
 
 def blast_fasta():
