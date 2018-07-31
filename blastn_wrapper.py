@@ -54,6 +54,11 @@ def check_if_fasta(file):
     else:
         return False
 
+def make_head_line():
+    with open(args.out_folder.strip() + "/files/head_line.txt", "a") as headLine:
+        headLine.write("Query ID\tSubject\tSubject accession\tSubject Taxonomy ID\tIdentity percentage\tCoverage\tevalue\tbitscore\n")
+
+
 def extension_check_and_rename():
     files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*"))]
     for x in files:
@@ -78,18 +83,18 @@ def create_blast_command(query, output_name):
         outformat = "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"
     else:
         outformat = args.outfmt.strip()
-    print args.blast_database.strip().replace(","," ")
-    base_command = ["/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/ncbi-blast-2.6.0+/bin/blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "),
-                    "-task", args.task.strip(),"-max_target_seqs", args.max_target_seqs.strip(), "-num_threads", "2", "-perc_identity", args.identity, "-out", args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt", outformat]
+    base_command = ["blastn2.6", "-query", query, "-db", args.blast_database.strip().replace(","," "),
+                    "-task", args.task.strip(), "-num_threads", "2", "-perc_identity", args.identity, "-out", args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt", outformat]
     #the taxidlist option is not used by galaxy because blast 2.8 is still in alpha version
     #add a taxonid list parameter to the blast command
     if args.taxidlist and args.taxidlist.strip() != "none":
         base_command = base_command + ["-taxidlist", args.taxidlist]
         admin_log(out="taxonomy filter used:" + str(args.taxidlist), error=None, function="blast")
     #add the maximum number of blast hits parameter
-
-    #if args.outfmt.strip() in ["custom_taxonomy", "6"]:
-    #"-max_target_seqs", args.max_target_seqs.strip(),
+    if args.outfmt.strip() in ["custom_taxonomy", "6"]:
+        base_command = base_command + ["-max_target_seqs", args.max_target_seqs.strip()]
+    if args.outfmt.strip() in ["0", "8", "11"]:
+        base_command = base_command + ["-num_alignments", args.max_target_seqs.strip()]
     return base_command
 
 def blast_fasta():
@@ -102,16 +107,17 @@ def blast_fasta():
         blast_command = create_blast_command(query, output_name)
         blast_out, blast_error = Popen(blast_command, stdout=PIPE,stderr=PIPE).communicate()
         admin_log(blast_out, blast_error, "blasting:"+str(os.path.basename(query)))
+        cat_out, cat_error = Popen("cat "+ args.out_folder.strip() + "/files/head_line.txt "+ args.out_folder.strip() + "/files/" + output_name.strip()+ " > "+ args.out_folder.strip() + "/files/head_" + output_name.strip(), stdout=PIPE, stderr=PIPE, shell=True).communicate()
+        admin_log(cat_out, cat_error, "cat:" + str(os.path.basename(query)))
+        mv_out, mv_error = Popen(["mv", args.out_folder.strip() + "/files/head_" + output_name.strip(), args.out_folder.strip() + "/files/" + output_name.strip()], stdout=PIPE, stderr=PIPE).communicate()
+        admin_log(mv_out, mv_error, "mv:" + str(os.path.basename(query)))
 
 def main():
     make_output_folders()
     unpack_or_cp()
     extension_check_and_rename()
+    make_head_line()
     blast_fasta()
-
-
-
-
 
 if __name__ == "__main__":
     main()

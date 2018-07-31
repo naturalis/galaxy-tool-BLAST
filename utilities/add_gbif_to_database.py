@@ -2,6 +2,10 @@ import sqlite3
 db = sqlite3.connect('taxonomy_db')
 cursor = db.cursor()
 
+def make_database():
+    cursor.execute('''CREATE TABLE gbif(id INTEGER PRIMARY KEY, source TEXT, taxonID INTEGER, acceptedNameUsageID INTEGER, taxonomicStatus TEXT, species TEXT, genus TEXT, family TEXT, order1 TEXT, class TEXT, phylum TEXT, kingdom TEXT)''')
+    db.commit()
+
 def check_empty_values(data):
     a = 0
     for taxon in data:
@@ -80,13 +84,11 @@ def add_catalog_of_life_taxonomy():
     db.commit()
 
 def main():
+    make_database()
     add_gbif_backbone_taxonomy()
     add_catalog_of_life_taxonomy()
-
-    #cursor.execute('''SELECT * FROM gbif WHERE genus=?''',["Plasmodium"])
-    #all_rows = cursor.fetchone()
-    #print all_rows
-
+    cursor.execute("CREATE INDEX index_gbif_species ON gbif (species);")
+    cursor.execute("CREATE INDEX index_gbif_genus ON gbif (genus);")
 
 if __name__ == "__main__":
     main()

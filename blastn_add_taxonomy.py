@@ -16,29 +16,35 @@ parser.add_argument('-t', '--taxonomy_reference', metavar='taxonomy reference', 
 parser.add_argument('-m', '--merged', metavar='merged taxonids', dest='merged', type=str, help='merged taxon id json', required=False, nargs='?', default="merged_taxonomy.json")
 parser.add_argument('-ts', '--taxonomy_source', dest='taxonomy_source', type=str, required=False, nargs='?', default="default")
 parser.add_argument('-o', '--output', metavar='output', dest='output', type=str, help='output file, BLAST hits with taxonomy', required=False, nargs='?', default="")
+parser.add_argument('-taxonomy_db', dest='taxonomy_db', type=str, help='sqlite db', required=True)
+parser.add_argument('-bold_db', dest='bold_db', type=str, help='sqlite db with bold taxonomy', required=True)
 args = parser.parse_args()
 
 def add_taxonomy(file, genbank, bold, gbif):
     with open(file, "r") as blasthits, open(args.blastinputfolder.strip() + "/taxonomy_"+ os.path.basename(file), "a") as output, open(args.blastinputfolder.strip() + "/orginaltaxonomy_"+ os.path.basename(file), "a") as output2:
         for line in blasthits:
-            if line.split("\t")[1].split("|")[0] == "BOLD":
-                line_taxonomy = bold.find_bold_taxonomy(line)
-            elif line.split("\t")[1].split("|")[0] == "private_BOLD":
-                line_taxonomy = find_private_bold_taxonomy(line)
+            if line.split("\t")[0] == "Query ID":
+                output.write(line.strip()+"\tSource\tTaxonomy\n")
+                output2.write(line.strip() + "\tSource\tTaxonomy\n")
             else:
-                line_taxonomy = genbank.find_genbank_taxonomy(line)
+                if line.split("\t")[1].split("|")[0] == "BOLD":
+                    line_taxonomy = bold.find_bold_taxonomy(line)
+                elif line.split("\t")[1].split("|")[0] == "private_BOLD":
+                    line_taxonomy = find_private_bold_taxonomy(line)
+                else:
+                    line_taxonomy = genbank.find_genbank_taxonomy(line)
 
-            output2.write(line_taxonomy+"\n")
-            if args.taxonomy_source == "GBIF":
-                line_taxonomy = gbif.find_gbif_taxonomy(line_taxonomy)
-                output.write(line_taxonomy.encode('utf-8').strip()+"\n")
-            elif args.taxonomy_source == "default":
-                output.write(line_taxonomy.encode('utf-8')+"\n")
+                output2.write(line_taxonomy+"\n")
+                if args.taxonomy_source == "GBIF":
+                    line_taxonomy = gbif.find_gbif_taxonomy(line_taxonomy)
+                    output.write(line_taxonomy.encode('utf-8').strip()+"\n")
+                elif args.taxonomy_source == "default":
+                    output.write(line_taxonomy.encode('utf-8')+"\n")
 
 def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)
-    gbif = Gbif("taxonomy/taxonomy_db")
-    bold = Bold("taxonomy/bold_db", "taxonomy/taxonomy_db")
+    gbif = Gbif(args.taxonomy_db)
+    bold = Bold(args.bold_db, args.taxonomy_db)
     files = [x for x in sorted(glob.glob(args.blastinputfolder.strip() + "/*.tabular"))]
     for file in files:
         add_taxonomy(file, genbank, bold, gbif)

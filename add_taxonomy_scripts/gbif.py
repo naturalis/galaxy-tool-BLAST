@@ -9,6 +9,7 @@ class Gbif:
     def find_gbif_taxonomy(self, line):
         species = line.split("\t")[-1].split(" / ")[-1].strip()
         genus = line.split("\t")[-1].split(" / ")[-2]
+        family = line.split("\t")[-1].split(" / ")[-3]
         hit = None
         if "unknown" not in species and int(species.count(" ")) >= 1:
             self.cursor.execute("SELECT * FROM gbif WHERE species=? LIMIT 1", [species.split(" ")[0] + " " + species.split(" ")[1].strip()])
@@ -32,5 +33,17 @@ class Gbif:
                 line[-1] = " / ".join(taxonomy)
                 line[-2] = hit[1]
                 return "\t".join(line)
+
+        if "unknown" not in family and hit is None:
+            self.cursor.execute("SELECT * FROM gbif WHERE family=? LIMIT 1", [family.strip()])
+            hit = self.cursor.fetchone()
+            if hit is not None:
+                line = line.split("\t")
+                unknown = ["unknown genus", "unknown species"]
+                taxonomy = list(reversed(hit[6:11]))+unknown
+                line[-1] = " / ".join(taxonomy)
+                line[-2] = hit[1]
+                return "\t".join(line)
+
         if hit is None:
             return line

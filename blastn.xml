@@ -20,6 +20,8 @@
         "none"
         #end if
         $identity
+        $blast_output_original
+
     </command>
     <macros>
         <macro name="zip_file_input_macro">
@@ -52,7 +54,7 @@
         </conditional>
 
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
+            <option value="/home/ubuntu/Marten/blast-galaxy/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
             <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
             <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM.fas">NLGIM</option>
             <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM_header.fas">NLGIM_header</option>
@@ -90,7 +92,13 @@
             <filter>input_type['type'] != "fasta"</filter>
         </data>
 
-        <data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST">
+        <!-- Output with original taxonomy -->
+        <data format="tabular" type="data" name="blast_output_original" label="$input_type.input.display_name BLAST original taxonomy">
+            <filter>input_type['type'] == "fasta"</filter>
+            <filter>output_format['taxonomy_method'] == "GBIF"</filter>
+        </data>
+
+        <data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST gbif taxonomy">
             <filter>input_type['type'] == "fasta"</filter>
             <change_format>
                 <when input="output_format.output_format_type" value="custom_taxonomy" format="tabular"/>
