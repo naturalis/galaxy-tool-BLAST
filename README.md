@@ -10,6 +10,6 @@ sudo wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2
 sudo tar xvzf ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo rm ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo chmod 777 ncbi-blast-2.6.0+/bin/*
-
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/blastn /usr/local/bin/blastn2.6.0
 
 ```
