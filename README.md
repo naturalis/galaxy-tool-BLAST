@@ -36,4 +36,10 @@ wget http://www.catalogueoflife.org/DCA_Export/zip-fixed/2018-07-31-archive-comp
 unzip -j 2018-07-31-archive-complete.zip "taxa.txt"
 python add_gbif_to_database.py
 ```
+**Genbank**<br />
+```
+sudo wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip
+unzip -j new_taxdump.zip "rankedlineage.dmp"
+unzip -j new_taxdump.zip "merged.dmp"
+```
 
