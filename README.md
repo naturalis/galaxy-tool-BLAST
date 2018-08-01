@@ -28,7 +28,6 @@ Move the database to the right location
 ```
 ```
 **GBIF and Catalogue of life**<br />
-Download the data
 ```
 wget http://rs.gbif.org/datasets/backbone/backbone-current.zip
 unzip -j backbone-current.zip "Taxon.tsv"
