@@ -40,4 +40,16 @@ unzip -j new_taxdump.zip "merged.dmp"
 
 ```
 **Genbank**<br />
+Genbank is big and always growing (https://www.ncbi.nlm.nih.gov/genbank/statistics/). Because of the amount of sequences it takes long to blast against this reference. A lot of times not all the sequences are needed. With the following commands you can make sub-selections of genbank. Downloading genbank can be done with the update_blastdb.pl scripts of blast 2.6.0.
+```
+sudo blastdbcmd -db nt -entry all > genbank.fa
+#download accassiontotaxon file
+wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz
+#extract two columns
+awk '{print $2" "$3}' nucl_gb.accession2taxid > accession_taxonid
+#remove first line
+sed '1d' accession_taxonid > accession_taxonid_noheader
+filter_nt.py
+```
+
 
