@@ -27,4 +27,13 @@ python add_bold_taxonomy.py
 Move the database to the right location
 ```
 ```
+**GBIF and Catalogue of life**<br />
+Download the data
+```
+wget http://rs.gbif.org/datasets/backbone/backbone-current.zip
+unzip -j backbone-current.zip "Taxon.tsv"
+wget http://www.catalogueoflife.org/DCA_Export/zip-fixed/2018-07-31-archive-complete.zip
+unzip -j 2018-07-31-archive-complete.zip "taxa.txt"
+python add_gbif_to_database.py
+```
 
