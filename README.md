@@ -15,7 +15,7 @@ sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/blastn /usr/local/bin/blastn
 ### Reference Taxonomy
 To add the taxonomy to the blast results the scripts need a reference. Currently the taxonomy of BOLD, Genbank, GBIF and catalogue of life is being used. 
 With the following commands references are downloaded, created and added to the server.
-BOLD:
+**BOLD:**
 Download the data
 ```
 bash utilities/get_bold_taxonomy.sh
