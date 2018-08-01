@@ -34,4 +34,9 @@ sudo wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip
 unzip -j new_taxdump.zip "rankedlineage.dmp"
 unzip -j new_taxdump.zip "merged.dmp"
 ```
+### Reference sequences
+**BOLD:**<br />
+```
 
+```
+**Genbank**<br />
