@@ -46,6 +46,7 @@ wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
 gunzip nt.gz
 #download accessiontotaxon file
 wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz
+gunzip nucl_gb.accession2taxid.gz
 #extract two columns
 awk '{print $2" "$3}' nucl_gb.accession2taxid > accession_taxonid
 #remove first line
