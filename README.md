@@ -71,6 +71,7 @@ Now the selections are made, the fasta files need be indexed<br />
 sudo makeblastdb2.6.0 -in CO1.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
 sudo makeblastdb2.6.0 -in 12S.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
 sudo makeblastdb2.6.0 -in ITS.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in 16S.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
 ```
 
 
