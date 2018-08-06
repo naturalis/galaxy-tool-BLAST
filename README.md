@@ -11,6 +11,21 @@ sudo tar xvzf ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo rm ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo chmod 777 ncbi-blast-2.6.0+/bin/*
 sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/blastn /usr/local/bin/blastn2.6.0
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/makeblastdb /usr/local/bin/makeblastdb2.6.0
+```
+### Installing<br />
+```
+cd /home/galaxy/Tools
+sudo git clone https://github.com/naturalis/galaxy-tool-BLAST
+sudo chmod 777 galaxy-tool-BLAST/*
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_wrapper.py /usr/local/bin/blastn_wrapper.py
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_add_taxonomy.py /usr/local/bin/blastn_add_taxonomy.py
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.sh /home/galaxy/galaxy/tools/identify/cutadapt.sh
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml /home/galaxy/galaxy/tools/identify/cutadapt.xml
+```
+Add the following line to /home/galaxy/galaxy/config/tool_conf.xml
+```
+<tool file="identify/cutadapt.xml" />
 ```
 ### Reference Taxonomy
 To add the taxonomy to the blast results the scripts need a reference. Currently the taxonomy of BOLD, Genbank, GBIF and catalogue of life is being used. 
