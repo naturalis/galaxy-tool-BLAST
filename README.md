@@ -44,14 +44,13 @@ Genbank is big and always growing (https://www.ncbi.nlm.nih.gov/genbank/statisti
 ```
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
 gunzip nt.gz
+filter_nt.py
 #download accessiontotaxon file
 wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz
 gunzip nucl_gb.accession2taxid.gz
 #extract two columns
-awk '{print $2" "$3}' nucl_gb.accession2taxid > accession_taxonid
-#remove first line
-sed '1d' accession_taxonid > accession_taxonid_noheader
-filter_nt.py
+sed '1d' nucl_gb.accession2taxid | awk '{print $2" "$3}' > accession_taxonid
+
 ```
 
 
