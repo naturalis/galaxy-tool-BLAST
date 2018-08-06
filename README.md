@@ -65,7 +65,12 @@ wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid
 gunzip nucl_gb.accession2taxid.gz
 #extract two columns
 sed '1d' nucl_gb.accession2taxid | awk '{print $2" "$3}' > accession_taxonid
-
+```
+Now the selections are made, the fasta files need be indexed<br />
+```
+sudo makeblastdb2.6.0 -in CO1.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in 12S.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in ITS.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
 ```
 
 
