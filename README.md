@@ -13,7 +13,7 @@ sudo chmod 777 ncbi-blast-2.6.0+/bin/*
 sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/blastn /usr/local/bin/blastn2.6.0
 sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/makeblastdb /usr/local/bin/makeblastdb2.6.0
 ```
-### Installing<br />
+### Adding to galaxy<br />
 ```
 cd /home/galaxy/Tools
 sudo git clone https://github.com/naturalis/galaxy-tool-BLAST
