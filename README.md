@@ -11,6 +11,21 @@ sudo tar xvzf ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo rm ncbi-blast-2.6.0+-x64-linux.tar.gz
 sudo chmod 777 ncbi-blast-2.6.0+/bin/*
 sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/blastn /usr/local/bin/blastn2.6.0
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.6.0+/bin/makeblastdb /usr/local/bin/makeblastdb2.6.0
+```
+### Adding to galaxy<br />
+```
+cd /home/galaxy/Tools
+sudo git clone https://github.com/naturalis/galaxy-tool-BLAST
+sudo chmod 777 galaxy-tool-BLAST/*
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_wrapper.py /usr/local/bin/blastn_wrapper.py
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_add_taxonomy.py /usr/local/bin/blastn_add_taxonomy.py
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.sh /home/galaxy/galaxy/tools/identify/blastn.sh
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml /home/galaxy/galaxy/tools/identify/blastn.xml
+```
+Add the following line to /home/galaxy/galaxy/config/tool_conf.xml
+```
+<tool file="identify/blastn.xml" />
 ```
 ### Reference Taxonomy
 To add the taxonomy to the blast results the scripts need a reference. Currently the taxonomy of BOLD, Genbank, GBIF and catalogue of life is being used. 
@@ -50,7 +65,13 @@ wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid
 gunzip nucl_gb.accession2taxid.gz
 #extract two columns
 sed '1d' nucl_gb.accession2taxid | awk '{print $2" "$3}' > accession_taxonid
-
+```
+Now the selections are made, the fasta files need be indexed<br />
+```
+sudo makeblastdb2.6.0 -in CO1.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in 12S.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in ITS.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
+sudo makeblastdb2.6.0 -in 16S.fa -dbtype nucl -taxid_map accession_taxonid -parse_seqids
 ```
 
 
