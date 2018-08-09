@@ -20,8 +20,8 @@ sudo git clone https://github.com/naturalis/galaxy-tool-BLAST
 sudo chmod 777 galaxy-tool-BLAST/*
 sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_wrapper.py /usr/local/bin/blastn_wrapper.py
 sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn_add_taxonomy.py /usr/local/bin/blastn_add_taxonomy.py
-sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.sh /home/galaxy/galaxy/tools/identify/cutadapt.sh
-sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml /home/galaxy/galaxy/tools/identify/cutadapt.xml
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.sh /home/galaxy/galaxy/tools/identify/blastn.sh
+sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml /home/galaxy/galaxy/tools/identify/blastn.xml
 ```
 Add the following line to /home/galaxy/galaxy/config/tool_conf.xml
 ```
