@@ -25,7 +25,7 @@ sudo ln -s /home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml /home/galaxy/galaxy/t
 ```
 Add the following line to /home/galaxy/galaxy/config/tool_conf.xml
 ```
-<tool file="identify/cutadapt.xml" />
+<tool file="identify/blastn.xml" />
 ```
 ### Reference Taxonomy
 To add the taxonomy to the blast results the scripts need a reference. Currently the taxonomy of BOLD, Genbank, GBIF and catalogue of life is being used. 
