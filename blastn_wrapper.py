@@ -17,6 +17,7 @@ parser.add_argument('-bm', '--max_target_seqs', dest='max_target_seqs', type=str
 parser.add_argument('-db', '--blast_database', dest='blast_database', type=str, required=True)
 parser.add_argument('-tl', '--taxidlist', dest='taxidlist', type=str, required=False, nargs='?', default="")
 parser.add_argument('-id', '--perc_identity', dest='identity', type=str, required=False, nargs='?', default="0")
+parser.add_argument('-cov', dest='coverage', type=str, required=False, nargs='?', default="0")
 parser.add_argument('-outfmt', '--outfmt', dest='outfmt', type=str, required=False, nargs='?', default="custom_taxonomy", choices=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','custom_taxonomy'])
 
 args = parser.parse_args()
@@ -58,7 +59,6 @@ def make_head_line():
     with open(args.out_folder.strip() + "/files/head_line.txt", "a") as headLine:
         headLine.write("Query ID\tSubject\tSubject accession\tSubject Taxonomy ID\tIdentity percentage\tCoverage\tevalue\tbitscore\n")
 
-
 def extension_check_and_rename():
     files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*"))]
     for x in files:
@@ -97,6 +97,16 @@ def create_blast_command(query, output_name):
         base_command = base_command + ["-num_alignments", args.max_target_seqs.strip()]
     return base_command
 
+def coverage_filter(blastfile):
+    with open(blastfile, "r") as blast, open(blastfile+"_cov", "a") as output:
+        for hit in blast:
+            coverage = hit.split("\t")[5]
+            if float(coverage) >= float(args.coverage):
+                output.write(hit)
+    Popen(["rm", blastfile], stdout=PIPE, stderr=PIPE).communicate()
+    Popen(["mv", blastfile+"_cov", blastfile], stdout=PIPE, stderr=PIPE).communicate()
+
+
 def blast_fasta():
     files = [x for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*.fa"))]
     #just an extra check
@@ -107,6 +117,8 @@ def blast_fasta():
         blast_command = create_blast_command(query, output_name)
         blast_out, blast_error = Popen(blast_command, stdout=PIPE,stderr=PIPE).communicate()
         admin_log(blast_out, blast_error, "blasting:"+str(os.path.basename(query)))
+        if args.coverage and args.outfmt == "custom_taxonomy":
+            coverage_filter(args.out_folder.strip() + "/files/" + output_name.strip())
         cat_out, cat_error = Popen("cat "+ args.out_folder.strip() + "/files/head_line.txt "+ args.out_folder.strip() + "/files/" + output_name.strip()+ " > "+ args.out_folder.strip() + "/files/head_" + output_name.strip(), stdout=PIPE, stderr=PIPE, shell=True).communicate()
         admin_log(cat_out, cat_error, "cat:" + str(os.path.basename(query)))
         mv_out, mv_error = Popen(["mv", args.out_folder.strip() + "/files/head_" + output_name.strip(), args.out_folder.strip() + "/files/" + output_name.strip()], stdout=PIPE, stderr=PIPE).communicate()

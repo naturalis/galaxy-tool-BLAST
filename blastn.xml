@@ -16,7 +16,9 @@
         #end if
         #if $output_format.output_format_type == "custom_taxonomy"
         $output_format.taxonomy_method
+        $output_format.coverage
         #else
+        "none"
         "none"
         #end if
         $identity
@@ -36,6 +38,7 @@
                 <option value="default">Taxonomy of the database from the hit</option>
                 <option value="GBIF" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option>
             </param>
+            <param name="coverage" type="float" label="Query Coverage percentage cutoff"  value="80" min="0.0" max="100"/>
         </macro>
 
     </macros>
@@ -79,9 +82,9 @@
                 <expand macro="taxonomy_macro"/>
             </when>
         </conditional>
-
-        <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
         <param name="identity" type="float" label="Identity percentage cutoff"  value="97" min="0.0" max="100"/>
+        <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
+
     </inputs>
     <code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py"/>
 
