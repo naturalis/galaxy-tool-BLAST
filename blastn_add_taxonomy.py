@@ -40,7 +40,7 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold):
                     line_taxonomy = gbif.find_gbif_taxonomy(line_taxonomy)
                     output.write(line_taxonomy.encode('utf-8').strip()+"\n")
                 elif args.taxonomy_source == "default":
-                    output.write(line_taxonomy.encode('utf-8')+"\n")
+                    output.write(line_taxonomy.encode('utf-8').strip()+"\n")
 
 def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)

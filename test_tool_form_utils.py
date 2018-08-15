@@ -1,3 +1,4 @@
+"""
 def taxon_filter(database):
     options = [("None","none", 1)]
     database = [i.encode('utf-8') for i in database]
@@ -8,7 +9,7 @@ def taxon_filter(database):
         else:
             options.append(("Actinopterygii", "/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/Actinopterygii_taxidlist",1))
     return options
-"""
+
 def taxonomy_source_list(database):
     options = [("None","none", 1)]
     options_dict = {}
