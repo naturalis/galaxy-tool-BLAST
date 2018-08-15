@@ -24,23 +24,24 @@ class Gbif:
                 return "\t".join(line)
 
         if "unknown" not in genus and hit is None:
-            self.cursor.execute("SELECT * FROM gbif WHERE genus=? LIMIT 1", [genus.strip()])
+            self.cursor.execute("SELECT species, genus, family, order1, class, phylum, kingdom FROM gbif WHERE genus=? LIMIT 1", [genus.strip()])
             hit = self.cursor.fetchone()
             if hit is not None:
                 line = line.split("\t")
                 unknown = ["unknown species"]
-                taxonomy = list(reversed(hit[6:12]))+unknown
+                taxonomy = list(reversed(hit[1:]))+unknown
                 line[-1] = " / ".join(taxonomy)
                 line[-2] = hit[1]
                 return "\t".join(line)
 
         if "unknown" not in family and hit is None:
-            self.cursor.execute("SELECT * FROM gbif WHERE family=? LIMIT 1", [family.strip()])
+            self.cursor.execute("SELECT species, genus, family, order1, class, phylum, kingdom FROM gbif WHERE family=? LIMIT 1", [family.strip()])
             hit = self.cursor.fetchone()
             if hit is not None:
                 line = line.split("\t")
                 unknown = ["unknown genus", "unknown species"]
-                taxonomy = list(reversed(hit[6:11]))+unknown
+                taxonomy = list(reversed(hit[2:]))+unknown
+                #print taxonomy
                 line[-1] = " / ".join(taxonomy)
                 line[-2] = hit[1]
                 return "\t".join(line)

@@ -35,7 +35,7 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold):
                 else:
                     line_taxonomy = genbank.find_genbank_taxonomy(line)
 
-                output2.write(line_taxonomy+"\n")
+                output2.write(line_taxonomy.strip()+"\n")
                 if args.taxonomy_source == "GBIF":
                     line_taxonomy = gbif.find_gbif_taxonomy(line_taxonomy)
                     output.write(line_taxonomy.encode('utf-8').strip()+"\n")
