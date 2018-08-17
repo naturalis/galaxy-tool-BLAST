@@ -31,7 +31,8 @@ class Gbif:
                 unknown = ["unknown species"]
                 taxonomy = list(reversed(hit[1:]))+unknown
                 line[-1] = " / ".join(taxonomy)
-                line[-2] = hit[1]
+                #line[-2] = hit[1]
+                line[-2] = "gbif"
                 return "\t".join(line)
 
         if "unknown" not in family and hit is None:
@@ -43,7 +44,8 @@ class Gbif:
                 taxonomy = list(reversed(hit[2:]))+unknown
                 #print taxonomy
                 line[-1] = " / ".join(taxonomy)
-                line[-2] = hit[1]
+                #line[-2] = hit[1]
+                line[-2] = "gbif"
                 return "\t".join(line)
 
         if hit is None:
