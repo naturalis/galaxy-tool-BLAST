@@ -30,9 +30,19 @@ def filter_16s():
                 new16sfile.write(">"+str(record.description)+"\n")
                 new16sfile.write(str(record.seq)+"\n")
 
+def filter_matk():
+    with open("nt", "rU") as handle, open("matk.fa", 'a') as newfile:
+        for record in SeqIO.parse(handle, "fasta"):
+            if ("chloroplast" in str(record.description.lower()) or
+                        "matk" in str(record.description.lower()) or
+                        "maturase" in str(record.description.lower()) or
+                        "bac" in str(record.description.lower())):
+                newfile.write(">" + str(record.description) + "\n")
+                newfile.write(str(record.seq) + "\n")
 
 if __name__ == '__main__':
     Thread(target = filter_co1).start()
     Thread(target = filter_its).start()
     Thread(target=filter_12s).start()
     Thread(target=filter_16s).start()
+    Thread(target=filter_matk).start()

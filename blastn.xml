@@ -96,12 +96,12 @@
         </data>
 
         <!-- Output with original taxonomy -->
-        <data format="tabular" type="data" name="blast_output_original" label="$input_type.input.display_name BLAST original taxonomy">
+        <data format="tabular" type="data" name="blast_output_original" label="$input_type.input.display_name BLAST gbif taxonomy">
             <filter>input_type['type'] == "fasta"</filter>
             <filter>output_format['taxonomy_method'] == "GBIF"</filter>
         </data>
 
-        <data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST gbif taxonomy">
+        <data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST original taxonomy">
             <filter>input_type['type'] == "fasta"</filter>
             <change_format>
                 <when input="output_format.output_format_type" value="custom_taxonomy" format="tabular"/>
