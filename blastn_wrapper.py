@@ -80,7 +80,7 @@ def file_count_check(files):
 
 def create_blast_command(query, output_name):
     if args.outfmt.strip() == "custom_taxonomy":
-        outformat = "6 qseqid stitle sacc staxids pident qcovs evalue bitscore"
+        outformat = "6 qseqid stitle sacc staxid pident qcovs evalue bitscore"
     else:
         outformat = args.outfmt.strip()
     base_command = ["blastn2.6.0", "-query", query, "-db", args.blast_database.strip().replace(","," "),
