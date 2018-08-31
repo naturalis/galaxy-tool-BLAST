@@ -53,7 +53,11 @@ class Genbank:
                     superkingdom = taxonomydb[mergedTaxid]["superkingdom"]
 
             if kingdom and kingdom != "unknown kingdom":
-                return hit.strip() + "\tGenbank\t" + taxonomydb[taxid]["kingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
+                if taxonomydb[taxid]["kingdom"] == "Metazoa":
+                    kingdomName = "Eukaryota"
+                else:
+                    kingdomName = taxonomydb[taxid]["kingdom"]
+                return hit.strip() + "\tGenbank\t" + kingdomName + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
             elif superkingdom and superkingdom != "unknown superkingdom":
                 return hit.strip() + "\tGenbank\t" + taxonomydb[taxid]["superkingdom"] + " / " + taxonomydb[taxid]["phylum"] + " / " + taxonomydb[taxid]["class"] + " / " + taxonomydb[taxid]["order"] + " / " + taxonomydb[taxid]["family"] + " / " + taxonomydb[taxid]["genus"] + " / " + taxonomydb[taxid]["species"] + "\n"
             else:

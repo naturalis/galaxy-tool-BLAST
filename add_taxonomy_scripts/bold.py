@@ -19,7 +19,8 @@ class Bold:
             line.append(" / ".join(list(reversed(list(hit[3:9])+[kingdom]))))
             return "\t".join(line)
         else:
-            return line.strip()
+            a = line.strip()+"\tBOLD\t" + "unknown kingdom / unknown phylum / unknown class / unknown order / unknown family / unknown genus / unknown species"
+            return a
 
     def get_kingdom(self, taxons):
         kingdom = "unknown kingdom"
