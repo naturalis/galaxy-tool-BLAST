@@ -8,6 +8,7 @@ from add_taxonomy_scripts.genbank import Genbank
 from add_taxonomy_scripts.gbif import Gbif
 from add_taxonomy_scripts.bold import Bold
 from add_taxonomy_scripts.privatebold import PrivateBold
+from add_taxonomy_scripts.unite import Unite
 import sqlite3
 
 # Retrieve the commandline arguments
@@ -21,7 +22,7 @@ parser.add_argument('-taxonomy_db', dest='taxonomy_db', type=str, help='sqlite d
 parser.add_argument('-bold_db', dest='bold_db', type=str, help='sqlite db with bold taxonomy', required=True)
 args = parser.parse_args()
 
-def add_taxonomy(file, genbank, bold, gbif, privatebold):
+def add_taxonomy(file, genbank, bold, gbif, privatebold, unite):
     with open(file, "r") as blasthits, open(args.blastinputfolder.strip() + "/taxonomy_"+ os.path.basename(file), "a") as output, open(args.blastinputfolder.strip() + "/orginaltaxonomy_"+ os.path.basename(file), "a") as output2:
         for line in blasthits:
             if line.split("\t")[0] == "Query ID":
@@ -32,6 +33,8 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold):
                     line_taxonomy = bold.find_bold_taxonomy(line)
                 elif line.split("\t")[1].split("|")[0] == "private_BOLD":
                     line_taxonomy = privatebold.find_private_bold_taxonomy(line)
+                elif line.split("\t")[1].split("|")[0] == "UNITE":
+                    line_taxonomy = unite.find_unite_taxonomy(line)
                 else:
                     line_taxonomy = genbank.find_genbank_taxonomy(line)
 
@@ -47,9 +50,10 @@ def process_files():
     gbif = Gbif(args.taxonomy_db)
     bold = Bold(args.bold_db, args.taxonomy_db)
     privatebold = PrivateBold(args.taxonomy_db)
+    unite = Unite()
     files = [x for x in sorted(glob.glob(args.blastinputfolder.strip() + "/*.tabular"))]
     for file in files:
-        add_taxonomy(file, genbank, bold, gbif, privatebold)
+        add_taxonomy(file, genbank, bold, gbif, privatebold, unite)
 
 def main():
     process_files()
