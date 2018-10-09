@@ -9,6 +9,7 @@ class PrivateBold:
         taxonomyList = line.split("\t")[1].split("|")
         species = taxonomyList[-1] if taxonomyList[-1] else "unknown species"
         genus = taxonomyList[-2] if taxonomyList[-2] else "unknown genus"
+        species = "unknown species" if species == genus else species
         family = taxonomyList[-3] if taxonomyList[-3] else "unknown family"
         order = taxonomyList[-4] if taxonomyList[-4] else "unknown order"
         classe = taxonomyList[-5] if taxonomyList[-5] else "unknown class"
