@@ -14,7 +14,7 @@ class Gbif:
         if "unknown" not in species and int(species.count(" ")) >= 1:
             self.cursor.execute("SELECT * FROM gbif WHERE species=? LIMIT 1", [species.split(" ")[0] + " " + species.split(" ")[1].strip()])
             hit = self.cursor.fetchone()
-            if hit is not None and hit[4] == "synonym":
+            if hit is not None and hit[4] == "synonym" and hit[4] == "homotypic synonym":
                 self.cursor.execute("SELECT * FROM gbif WHERE taxonID=? LIMIT 1", [hit[3]])
                 hit = self.cursor.fetchone()
             if hit is not None:
