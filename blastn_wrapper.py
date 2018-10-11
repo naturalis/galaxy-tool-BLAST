@@ -14,6 +14,7 @@ parser.add_argument('-it', '--input_type', dest='input_type', type=str,required=
 parser.add_argument('-of', '--folder_output', dest='out_folder', type=str, required=True)
 parser.add_argument('-bt', '--blast_task', dest='task', type=str, required=True, choices=['blastn', 'megablast'])
 parser.add_argument('-bm', '--max_target_seqs', dest='max_target_seqs', type=str, required=False, nargs='?', default="1")
+parser.add_argument('-dbt', '--blast_database_type', dest='blast_database_type', type=str, required=True, choices=['local', 'user'])
 parser.add_argument('-db', '--blast_database', dest='blast_database', type=str, required=True)
 parser.add_argument('-tl', '--taxidlist', dest='taxidlist', type=str, required=False, nargs='?', default="")
 parser.add_argument('-id', '--perc_identity', dest='identity', type=str, required=False, nargs='?', default="0")
@@ -124,11 +125,18 @@ def blast_fasta():
         mv_out, mv_error = Popen(["mv", args.out_folder.strip() + "/files/head_" + output_name.strip(), args.out_folder.strip() + "/files/" + output_name.strip()], stdout=PIPE, stderr=PIPE).communicate()
         admin_log(mv_out, mv_error, "mv:" + str(os.path.basename(query)))
 
+def make_user_database():
+    """This method creates a blast database from a user fasta file"""
+    createblast_out, createblast_error = Popen(["makeblastdb", "-in", args.blast_database, "-dbtype", "nucl"], stdout=PIPE, stderr=PIPE).communicate()
+    admin_log(createblast_out, createblast_error, "create database:")
+
 def main():
     make_output_folders()
     unpack_or_cp()
     extension_check_and_rename()
     make_head_line()
+    if args.blast_database_type == "user":
+        make_user_database()
     blast_fasta()
 
 if __name__ == "__main__":

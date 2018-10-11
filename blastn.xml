@@ -4,7 +4,7 @@
         blastn.sh
         $input_type.type
         $input_type.input
-        $database
+        $database_type.database
         $task
         $max_target_seqs
         $output_format.output_format_type
@@ -23,6 +23,7 @@
         #end if
         $identity
         $blast_output_original
+        $database_type.type
 
     </command>
     <macros>
@@ -40,6 +41,18 @@
             </param>
             <param name="coverage" type="float" label="Query Coverage percentage cutoff"  value="80" min="0.0" max="100"/>
         </macro>
+        <macro name="local_databases">
+        <param name="database" type="select" multiple="true" label="Database">
+            <option value="/home/ubuntu/Marten/blast-galaxy/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM.fas">NLGIM</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/UNITE.fa">UNITE</option>
+            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM_header.fas">NLGIM_header</option>
+        </param>
+        </macro>
+        <macro name="user_input_fasta">
+            <param format="fasta" name="database" type="data" label="fasta file"/>
+        </macro>
 
     </macros>
     <inputs>
@@ -55,13 +68,19 @@
                 <expand macro="fasta_file_input_macro"/>
             </when>
         </conditional>
+        <conditional name="database_type">
+            <param name="type" type="select" multiple="false" label="Subject database/sequences">
+                <option value="local">Locally installed BLAST database</option>
+                <option value="user" selected="true">FASTA file from your history</option>
+            </param>
+            <when value="local">
+                <expand macro="local_databases"/>
+            </when>
+            <when value="user">
+                <expand macro="user_input_fasta"/>
+            </when>
+        </conditional>
 
-        <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/ubuntu/Marten/blast-galaxy/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM.fas">NLGIM</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM_header.fas">NLGIM_header</option>
-        </param>
 
         <!--<param name="taxidlist" type="select" multiple="false" label="NCBI taxonomy filter" dynamic_options="taxon_filter(database)"/>-->
 
