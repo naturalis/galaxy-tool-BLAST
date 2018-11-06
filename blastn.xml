@@ -43,11 +43,25 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/ubuntu/Marten/blast-galaxy/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 04-06-2018)</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/BoLD_combined_filtered.fasta">BOLD</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM.fas">NLGIM</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/UNITE.fa">UNITE</option>
-            <option value="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/database/NLGIM_header.fas">NLGIM_header</option>
+            <option value="/home/galaxy/ExtraRef/blast_reference/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 21-08-2018)</option>
+            <!--
+            <option value="/media/GalaxyData/blast_references/ITS/ITS.fa" label="DatabaseITS">ITS (Genbank 21-08-2018)</option>
+            <option value="/media/GalaxyData/blast_references/MATK/matk.fa" label="DatabaseMATK">MATK (Genbank 21-08-2018)</option>
+	    <option value="/media/GalaxyData/blast_references/12S/12S.fa" label="Database12S">12S (Genbank 21-08-2018)</option>
+            <option value="/media/GalaxyData/blast_references/RBCL/rbcl.fa" label="DatabaseRBCL">rbcl (Genbank 21-08-2018)</option>
+	    <option value="/media/GalaxyData/blast_references/genbank/nt" label="DatabaseGenbank">Genbank (Genbank 21-08-2018)</option>
+            <option value="/media/GalaxyData/blast_references/bacterial_genome/bacterial_genome2_nodubs.fa" label="Databasebacterial">Bacterial genome selection (Genbank 21-08-2018)</option>
+	    <option value="/media/GalaxyData/blast_references/BOLD/BoLD_combined_filtered.fasta" label="BOLD">BOLD (04-08-2018)</option>
+            <option value="/media/GalaxyData/blast_references/NLGIM/NLGIM_header.fas" label="nlgim">NLGIM (09-08-2018)</option>
+            <option value="/media/GalaxyData/blast_references/waterscan/RefDB_BOLD.fa" label="waterscan">waterscan</option>
+            <option value="/media/GalaxyData/blast_references/waterscan/filtered_waterscan.fa" label="waterscanfiltered">waterscan (filtered)</option>
+            <option value="/media/GalaxyData/blast_references/UNITE/UNITE.fa" label="UNITE">UNITE (20-09-2018)</option>
+            <option value="/media/GalaxyData/blast_references/save_spiders/safeSpidersAll12.fa" label="safespiders">safeSpidersAll12 (No taxonomy)</option>
+            <option value="/media/GalaxyData/blast_references/NATURALIS_ITS/ITS_20181002.fas" label="itsnaturalis">ITS (NATURALIS 02-10-2018)</option>
+            <option value="/media/GalaxyData/blast_references/NATURALIS_MATK/MATK_20181002.fas" label="matknaturalis">MATK (NATURALIS 02-10-2018)</option>-->
+
+
+
         </param>
         </macro>
         <macro name="user_input_fasta">
@@ -70,8 +84,8 @@
         </conditional>
         <conditional name="database_type">
             <param name="type" type="select" multiple="false" label="Subject database/sequences">
-                <option value="local">Locally installed BLAST database</option>
-                <option value="user" selected="true">FASTA file from your history</option>
+                <option value="local" selected="true">Locally installed BLAST database</option>
+                <option value="user">FASTA file from your history</option>
             </param>
             <when value="local">
                 <expand macro="local_databases"/>
@@ -105,7 +119,7 @@
         <param name="max_target_seqs" type="integer" label="Maximum number of BLAST hits per sequence" value="1" min="1"/>
 
     </inputs>
-    <code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py"/>
+    <!--<code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py"/>-->
 
     <outputs>
         <data format="txt" type="data" name="log_output" label="$input_type.input.display_name log"/>

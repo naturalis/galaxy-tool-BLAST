@@ -3,7 +3,7 @@
 blastn_add_taxonomy   V1.0    martenhoogeveen@naturalis.nl
 This script adds the taxonomy to the BLAST output. The input is de folder path that contains the blast results.
 """
-import json, sys, argparse, os, glob, requests
+import json, sys, argparse, os, glob
 from add_taxonomy_scripts.genbank import Genbank
 from add_taxonomy_scripts.gbif import Gbif
 from add_taxonomy_scripts.bold import Bold
