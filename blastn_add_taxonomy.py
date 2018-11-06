@@ -26,8 +26,8 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold, unite):
     with open(file, "r") as blasthits, open(args.blastinputfolder.strip() + "/taxonomy_"+ os.path.basename(file), "a") as output, open(args.blastinputfolder.strip() + "/orginaltaxonomy_"+ os.path.basename(file), "a") as output2:
         for line in blasthits:
             if line.split("\t")[0] == "#Query ID":
-                output.write(line.strip()+"\tSource\tTaxonomy\n")
-                output2.write(line.strip() + "\tSource\tTaxonomy\n")
+                output.write(line.strip()+"\t#Source\t#Taxonomy\n")
+                output2.write(line.strip() + "\t#Source\t#Taxonomy\n")
             else:
                 if line.split("\t")[1].split("|")[0] == "BOLD":
                     line_taxonomy = bold.find_bold_taxonomy(line)
