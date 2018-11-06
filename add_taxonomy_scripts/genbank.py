@@ -37,6 +37,8 @@ class Genbank:
             return "N/A"
 
     def find_genbank_taxonomy(self, hit):
+        kingdom = "unknown kingdom"
+        superkingdom = "unknown kingdom"
         taxid = hit.split("\t")[3]
         if taxid == "N/A":
             return hit.strip() + "\tGenbank\t" + "unknown kingdom / unknown phylum / unknown class / unknown order / unknown family / unknown genus / unknown species\n"

@@ -58,7 +58,7 @@ def check_if_fasta(file):
 
 def make_head_line():
     with open(args.out_folder.strip() + "/files/head_line.txt", "a") as headLine:
-        headLine.write("Query ID\tSubject\tSubject accession\tSubject Taxonomy ID\tIdentity percentage\tCoverage\tevalue\tbitscore\n")
+        headLine.write("#Query ID\t#Subject\t#Subject accession\t#Subject Taxonomy ID\t#Identity percentage\t#Coverage\t#evalue\t#bitscore\n")
 
 def extension_check_and_rename():
     files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*"))]
