@@ -1,7 +1,6 @@
 class Silva:
     def find_silva_taxonomy(self, line):
-        print line.split("\t")[2]
-        taxonomyList = line.split("\t")[1].split(" ", 1)[-1].split(";")
+        taxonomyList = line.split("\t")[1].split("|")[-1].split(";")
 
         species = taxonomyList[-1] if taxonomyList[-1] else "unknown species"
         species = species.replace("_", " ")
