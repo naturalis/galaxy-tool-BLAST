@@ -44,7 +44,7 @@
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
             <option value="/home/galaxy/ExtraRef/blast_reference/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 21-08-2018)</option>
-            <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSURef_tax_silva_NCBI_taxonomy.fasta">SILVA SSU REF</option>
+            <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSUParc_tax_silva_taxonomy.fasta">SILVA SSU Parc</option>
             <!--           
             <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSUParc_tax_silva.fasta">SILVA SSU 16S</option>
             <option value="/media/GalaxyData/blast_references/ITS/ITS.fa" label="DatabaseITS">ITS (Genbank 21-08-2018)</option>

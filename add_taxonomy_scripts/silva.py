@@ -2,17 +2,25 @@ class Silva:
     def find_silva_taxonomy(self, line):
         taxonomyList = line.split("\t")[1].split("|")[-1].split(";")
 
-        species = taxonomyList[-1] if taxonomyList[-1] else "unknown species"
-        species = species.replace("_", " ")
-        genus = taxonomyList[-2] if taxonomyList[-2] else "unknown genus"
-        family = taxonomyList[-3] if taxonomyList[-3] else "unknown family"
-        order = taxonomyList[-4] if taxonomyList[-4] else "unknown order"
-        classe = taxonomyList[-5] if taxonomyList[-5] else "unknown class"
-        phylum = taxonomyList[-6] if taxonomyList[-6] else "unknown phylum"
-        kingdom = taxonomyList[-7] if taxonomyList[-7] else "unknown kingdom"
+        species = taxonomyList[-1]
+        if species == "unidentified":
+            species = "unknown species"
+        ranks = taxonomyList[:-1]
+        unknowns = ["unknown kingdom", "unknown phylum", "unknown class", "unknown order", "unknown family", "unknown genus"]
+        for x in unknowns[len(ranks):]:
+            ranks.append(x)
+        ranks.append(species)
+        print ranks
+        species = ranks[6]
+        genus = ranks[5]
+        family = ranks[4]
+        order = ranks[3]
+        classe = ranks[2]
+        phylum = ranks[1]
+        kingdom = ranks[0]
         taxonomy = [kingdom, phylum, classe, order, family, genus, species]
 
         newLine = line.strip().split("\t")
-        newLine[1] = newLine[1].split(" ", 1)[0]
-        newLine[2] = newLine[1].split("|")[1]
+        newLine[1] = newLine[1].split("|")[1]
+        newLine[2] = newLine[2].split("|")[1].split(".")[0]
         return "\t".join(newLine) + "\tsilva\t" + " / ".join(taxonomy) + "\n"
