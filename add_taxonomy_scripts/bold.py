@@ -2,6 +2,24 @@ import sqlite3
 
 class Bold:
     def __init__(self, database, gbif):
+        self.db = database
+        self.gbif_db = gbif
+
+    def find_bold_taxonomy(self, line):
+        species = line.split("\t")[1].split("|")[2]
+        genus = line.split("\t")[1].split("|")[8]
+        family = line.split("\t")[1].split("|")[7]
+        order = line.split("\t")[1].split("|")[6]
+        classe = line.split("\t")[1].split("|")[5]
+        phylum = line.split("\t")[1].split("|")[4]
+        kingdom = line.split("\t")[1].split("|")[3]
+        taxonomy = [kingdom, phylum, classe, order, family, genus, species]
+        newLine = line.strip().split("\t")
+        newLine[1] = newLine[1].split("|")[1]
+        newLine[2] = newLine[2].split("|")[1]
+        return "\t".join(newLine) + "\tbold\t" + " / ".join(taxonomy) + "\n"
+    """
+    def __init__(self, database, gbif):
         self.db = sqlite3.connect(database)
         self.cursor = self.db.cursor()
         self.gbif_db = sqlite3.connect(gbif)
@@ -31,4 +49,4 @@ class Bold:
                 if hit is not None:
                     return hit[0]
         return kingdom
-
+    """
