@@ -40,6 +40,13 @@ def filter_matk():
                 newfile.write(">" + str(record.description) + "\n")
                 newfile.write(str(record.seq) + "\n")
 
+def filter_rbcl():
+    with open("nt", "rU") as handle, open("rbcl.fa", 'a') as newfile:
+        for record in SeqIO.parse(handle, "fasta"):
+            if ("ribulose-1,5-bisphosphate carboxylase/oxygenase" in str(record.description.lower()) or "rbcl" in str(record.description.lower()) or "chloroplast" in str(record.description.lower()) or "plastid" in str(record.description.lower())):
+                newfile.write(">" + str(record.description) + "\n")
+                newfile.write(str(record.seq) + "\n")
+
 if __name__ == '__main__':
     Thread(target = filter_co1).start()
     Thread(target = filter_its).start()
