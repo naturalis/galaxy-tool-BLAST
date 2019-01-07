@@ -31,7 +31,9 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva):
                 output2.write(line.strip() + "\t#Source\t#Taxonomy\n")
             else:
                 if line.split("\t")[1].split("|")[0] == "BOLD":
-                    line_taxonomy = bold.find_bold_taxonomy(line)
+                    line_taxonomy = bold.find_bold_taxonomy(line, "bold")
+                elif line.split("\t")[1].split("|")[0] == "klasse":
+                    line_taxonomy = bold.find_bold_taxonomy(line, "klasse")
                 elif line.split("\t")[1].split("|")[0] == "private_BOLD" or line.split("\t")[1].split("|")[0] == "custom":
                     line_taxonomy = privatebold.find_private_bold_taxonomy(line)
                 elif line.split("\t")[1].split("|")[0] == "UNITE":

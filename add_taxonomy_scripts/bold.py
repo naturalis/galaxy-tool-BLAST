@@ -5,7 +5,7 @@ class Bold:
         self.db = database
         self.gbif_db = gbif
 
-    def find_bold_taxonomy(self, line):
+    def find_bold_taxonomy(self, line, source):
         species = line.split("\t")[1].split("|")[2]
         genus = line.split("\t")[1].split("|")[8]
         family = line.split("\t")[1].split("|")[7]
@@ -17,7 +17,7 @@ class Bold:
         newLine = line.strip().split("\t")
         newLine[1] = newLine[1].split("|")[1]
         newLine[2] = newLine[2].split("|")[1]
-        return "\t".join(newLine) + "\tbold\t" + " / ".join(taxonomy) + "\n"
+        return "\t".join(newLine) + "\t"+source+"\t" + " / ".join(taxonomy) + "\n"
     """
     def __init__(self, database, gbif):
         self.db = sqlite3.connect(database)
