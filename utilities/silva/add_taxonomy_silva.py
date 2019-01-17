@@ -2,6 +2,8 @@
 
 """
 from Bio import SeqIO
+import sys, os, argparse
+from subprocess import call, Popen, PIPE
 
 # Retrieve the commandline arguments
 parser = argparse.ArgumentParser(description='Add taxonomy to silva')
