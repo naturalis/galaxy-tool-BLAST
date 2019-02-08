@@ -1,6 +1,7 @@
 """
 """
 from Bio import SeqIO
+import argparse
 
 parser = argparse.ArgumentParser(description='Add taxonomy to BOLD fasta file')
 parser.add_argument('-t', '--taxonomy', dest='taxonomy', type=str, required=True)
