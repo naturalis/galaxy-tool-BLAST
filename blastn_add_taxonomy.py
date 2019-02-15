@@ -54,7 +54,7 @@ def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)
     gbif = Gbif(args.taxonomy_db)
     bold = Bold(args.bold_db, args.taxonomy_db)
-    privatebold = PrivateBold(args.taxonomy_db)
+    privatebold = PrivateBold()
     unite = Unite()
     silva = Silva()
     files = [x for x in sorted(glob.glob(args.blastinputfolder.strip() + "/*.tabular"))]
