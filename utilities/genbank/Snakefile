@@ -1,0 +1,94 @@
+from subprocess import call, Popen, PIPE
+import re
+from Bio import SeqIO
+#configfile: "config.yml"
+
+rule all:
+	input:
+		#protected("output/genbank/nt"),
+		#protected("output/NT/accession_taxonid")
+		"output/CO1/CO1.fa",
+		"output/ITS/ITS.fa",
+		"output/12S/12S.fa",
+		"output/16S/16S.fa",
+		"output/matK/matK.fa",
+		"output/rbcL/rbcL.fa"
+
+
+
+
+"""
+rule download_nt_fasta:
+	output:
+		#protected("output/genbank/nt"),
+		protected("output/NT/accession_taxonid")
+	run:
+		#shell("wget -P output/NT ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz")
+		#shell("gunzip output/NT/nt.gz")
+		shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz")
+		shell("gunzip output/NT/nucl_gb.accession2taxid.gz")
+		shell("sed '1d' output/NT/nucl_gb.accession2taxid | awk '{{print $2\" \"$3}}' > output/NT/accession_taxonid")
+"""
+rule create_CO1:
+	output:
+		"output/CO1/CO1.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/CO1/CO1.fa",'a') as newco1file:
+        for record in SeqIO.parse(handle, "fasta"):
+            if "co1" in str(record.description.lower()) or "coi" in str(record.description.lower()) or "cox" in str(record.description.lower()) or "cytochrome c oxidase" in str(record.description.lower()) or "cytochrome oxidase" in str(record.description.lower()):
+                newco1file.write(">"+str(record.description)+"\n")
+                newco1file.write(str(record.seq)+"\n")
+
+rule create_ITS:
+	output:
+		"output/ITS/ITS.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/ITS/ITS.fa",'a') as newitsfile:
+        for record in SeqIO.parse(handle, "fasta"):
+            if "internal transcribed spacer" in str(record.description).lower() or "its" in str(record.description).lower() or "5.8" in str(record.description).lower():
+                newitsfile.write(">"+str(record.description)+"\n")
+                newitsfile.write(str(record.seq)+"\n")
+
+rule create_12S:
+	output:
+		"output/12S/12S.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/12S/12S.fa",'a') as new12sfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				if "12S" in str(record.description).lower() or "mitochondrial" in str(record.description).lower():
+					new12sfile.write(">"+str(record.description)+"\n")
+					new12sfile.write(str(record.seq)+"\n")
+
+rule create_16S:
+	output:
+		"output/16S/16S.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/16S/16S.fa",'a') as new16sfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				if "16s" in str(record.description).lower() or "mitochondrial" in str(record.description).lower() or "mitochondrion" in str(record.description).lower():
+					new16sfile.write(">"+str(record.description)+"\n")
+					new16sfile.write(str(record.seq)+"\n")
+
+rule create_matK:
+	output:
+		"output/matK/matK.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/matK/matK.fa", 'a') as newfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				des = str(record.description.lower())
+				if ("chloroplast" in des or "matk" in des or "maturase" in des or "bac" in des):
+					newfile.write(">" + str(record.description) + "\n")
+					newfile.write(str(record.seq) + "\n")
+
+rule create_rbcL:
+	output:
+		"output/rbcL/rbcL.fa"
+	run:
+		with open("output/NT/nt", "rU") as handle, open("output/rbcL/rbcL.fa", 'a') as newfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				des = str(record.description.lower())
+				if ("ribulose-1,5-bisphosphate carboxylase/oxygenase" in des or "rbcl" in des or "chloroplast" in des or "plastid" in des):
+					newfile.write(">" + str(record.description) + "\n")
+					newfile.write(str(record.seq) + "\n")
+
+rule create_mapping_file_CO1:
