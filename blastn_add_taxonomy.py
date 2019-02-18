@@ -34,7 +34,7 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva):
                     line_taxonomy = bold.find_bold_taxonomy(line, "bold")
                 elif line.split("\t")[1].split("|")[0] == "klasse":
                     line_taxonomy = bold.find_bold_taxonomy(line, "klasse")
-                elif line.split("\t")[1].split("|")[0] == "private_BOLD" or line.split("\t")[1].split("|")[0] == "custom":
+                elif line.split("\t")[1].split("|")[0] == "private_BOLD":
                     line_taxonomy = privatebold.find_private_bold_taxonomy(line)
                 elif line.split("\t")[1].split("|")[0] == "UNITE":
                     line_taxonomy = unite.find_unite_taxonomy(line)
@@ -54,7 +54,7 @@ def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)
     gbif = Gbif(args.taxonomy_db)
     bold = Bold(args.bold_db, args.taxonomy_db)
-    privatebold = PrivateBold(args.taxonomy_db)
+    privatebold = PrivateBold()
     unite = Unite()
     silva = Silva()
     files = [x for x in sorted(glob.glob(args.blastinputfolder.strip() + "/*.tabular"))]
