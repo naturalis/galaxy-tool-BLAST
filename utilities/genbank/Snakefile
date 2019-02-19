@@ -7,12 +7,18 @@ rule all:
 	input:
 		#protected("output/genbank/nt"),
 		#protected("output/NT/accession_taxonid")
-		"output/CO1/CO1.fa",
-		"output/ITS/ITS.fa",
-		"output/12S/12S.fa",
-		"output/16S/16S.fa",
-		"output/matK/matK.fa",
-		"output/rbcL/rbcL.fa"
+		#"output/CO1/CO1.fa",
+		#"output/ITS/ITS.fa",
+		#"output/12S/12S.fa",
+		#"output/16S/16S.fa",
+		#"output/matK/matK.fa",
+		#"output/rbcL/rbcL.fa",
+		"output/CO1/CO1.map",
+		"output/ITS/ITS.map",
+		"output/12S/12S.map",
+		"output/16S/16S.map",
+		"output/matK/matK.map",
+		"output/rbcL/rbcL.map"
 
 
 
@@ -28,7 +34,7 @@ rule download_nt_fasta:
 		shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz")
 		shell("gunzip output/NT/nucl_gb.accession2taxid.gz")
 		shell("sed '1d' output/NT/nucl_gb.accession2taxid | awk '{{print $2\" \"$3}}' > output/NT/accession_taxonid")
-"""
+
 rule create_CO1:
 	output:
 		"output/CO1/CO1.fa"
@@ -90,5 +96,65 @@ rule create_rbcL:
 				if ("ribulose-1,5-bisphosphate carboxylase/oxygenase" in des or "rbcl" in des or "chloroplast" in des or "plastid" in des):
 					newfile.write(">" + str(record.description) + "\n")
 					newfile.write(str(record.seq) + "\n")
-
+"""
 rule create_mapping_file_CO1:
+	input:
+		fasta = "output/CO1/CO1.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/CO1/CO1.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+
+rule create_mapping_file_ITS:
+	input:
+		fasta = "output/ITS/ITS.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/ITS/ITS.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+
+rule create_mapping_file_12S:
+	input:
+		fasta = "output/12S/12S.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/12S/12S.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+
+rule create_mapping_file_16S:
+	input:
+		#"fake input to avoid parallel processing"
+		CO1map = "output/CO1/CO1.map",
+		ITSmap"output/ITS/ITS.map",
+		12Smap = "output/12S/12S.map",
+		fasta = "output/16S/16S.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/16S/16S.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+
+rule create_mapping_file_matK:
+	input:
+		#"fake input to avoid parallel processing"
+		CO1map = "output/CO1/CO1.map",
+		ITSmap"output/ITS/ITS.map",
+		12Smap = "output/12S/12S.map",
+		fasta = "output/matK/matK.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/matK/matK.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+
+rule create_mapping_file_rbcL:
+	input:
+		fasta = "output/rbcL/rbcL.fa",
+		accessions = "output/NT/accession_taxonid"
+	output:
+		"output/rbcL/rbcL.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")

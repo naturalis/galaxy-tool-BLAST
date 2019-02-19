@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 accessions = {}
 
-print "start making accession dict"
+#print "start making accession dict"
 with open(args.inputfasta, "rU") as handle:
     for record in SeqIO.parse(handle, "fasta"):
         accession = str(record.id)
@@ -21,7 +21,7 @@ with open(args.inputfasta, "rU") as handle:
             accessions[accession]=accession
         except:
             pass
-print "start making accession dict - done"
+#print "start making accession dict - done"
 
 with open(args.taxidmap, "rU") as taxonmap, open(args.output,'a') as newmap:
     for x in taxonmap:
