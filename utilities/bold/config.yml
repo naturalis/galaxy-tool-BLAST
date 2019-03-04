@@ -1,0 +1,3 @@
+arthropoda:
+  fasta: input/arthropoda_manual.fas
+  taxonomy: input/arthropoda_taxonomy_manual.tsv

@@ -1,0 +1,40 @@
+from subprocess import call, Popen, PIPE
+import re
+
+configfile: "config.yml"
+
+rule all:
+	input:
+		#"output/BOLD/bold_all_sequences_taxonomy.fa",
+		#"output/BOLD/bold_all_taxonomy.tsv",
+		#"simplecheck_bold_taxonomy_log.txt"
+
+rule bold:
+	output:
+		"output/BOLD/bold_all_sequences_taxonomy.fa",
+		#"output/BOLD/bold_all_taxonomy.tsv",
+		#"simplecheck_bold_taxonomy_log.txt"
+		#"gbif_taxonomy.tsv"
+	params:
+		arthropoda_fasta=config["arthropoda"]["fasta"],
+		arthropoda_taxonomy=config["arthropoda"]["taxonomy"]
+	run:
+		#shell("sh ../bold/get_bold_sequences.sh")
+		#shell("rm -f bold_fasta_files/Arthropoda_sequences.fasta")
+		#shell("cp {params.arthropoda_fasta} bold_fasta_files/Arthropoda_sequences_manual.fasta")
+		#shell("cat bold_fasta_files/* > output/BOLD/bold_all_sequences.fa")
+		#shell("sh ../bold/get_bold_taxonomy.sh")
+		#shell("rm -f bold_taxonomy_files/Arthropoda_taxonomy.tsv")
+		#shell("cp {params.arthropoda_taxonomy} bold_taxonomy_files/Arthropoda_taxonomy_manual.tsv")
+		#shell("cat bold_taxonomy_files/* > output/BOLD/bold_all_taxonomy.tsv")
+		#shell("sh ../bold/simplecheck_bold_taxonomy.sh")
+		#shell("sed -e '/^[^>]/ s/-//g' output/BOLD/bold_all_sequences.fa > output/BOLD/bold_all_sequences_filtered.fa")
+		#shell("awk -F \"\t\" '{{print $1\"\t\"$10\"\t\"$12\"\t\"$14\"\t\"$16\"\t\"$20\"\t\"$22}}' output/BOLD/bold_all_taxonomy.tsv > output/BOLD/bold_all_taxonomy_filtered.tsv")
+		#shell("wget http://rs.gbif.org/datasets/backbone/backbone-current.zip")
+		#shell("unzip -j backbone-current.zip \"Taxon.tsv\"")
+		#shell("awk -F \"\t\" '{{print $18\"\t\"$19\"\t\"$20\"\t\"$21\"\t\"$22\"\t\"$23}}' Taxon.tsv > gbif_taxonomy.tsv")
+		#shell("python ../bold/add_taxonomy_bold.py -t output/BOLD/bold_all_taxonomy_filtered.tsv -g gbif_taxonomy.tsv -b output/BOLD/bold_all_sequences_filtered.fa -o output/BOLD/bold_all_sequences_taxonomy.fa")
+
+		#Do not uncomment these lines while developing
+		#shell("rm -rf bold_fasta_files")
+		#shell("rm -rf bold_taxonomy_files")
