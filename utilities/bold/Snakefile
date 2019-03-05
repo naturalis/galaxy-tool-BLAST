@@ -18,8 +18,8 @@ rule get_data:
 		fasta_folder = "output/bold_fasta_files",
 		taxonomy_folder = "output/bold_taxonomy_files"
 	log:
-		log_error = "logs/log_error.txt",
-		log_out = "logs/log_stdout.txt"
+		log_error = "output/logs/log_error.txt",
+		log_out = "output/logs/log_stdout.txt"
 	run:
 		shell("sh get_bold_sequences.sh {params.fasta_folder} >> {log.log_out} 2>> {log.log_error}")
 		#Arthropoda fasta file is a known problem
@@ -64,9 +64,12 @@ rule filter_and_check_taxonomy:
 rule gbif_taxonomy:
 	output:
 		gbif_taxonomy = "output/gbif_taxonomy.tsv"
+	log:
+		log_error = "output/logs/log_error.txt",
+		log_out = "output/logs/log_stdout.txt"
 	run:
-		shell("wget -P output http://rs.gbif.org/datasets/backbone/backbone-current.zip")
-		shell("unzip -j output/backbone-current.zip \"Taxon.tsv\" -d output/")
+		shell("wget -P output http://rs.gbif.org/datasets/backbone/backbone-current.zip >> {log.log_out} 2>> {log.log_error}")
+		shell("unzip -j output/backbone-current.zip \"Taxon.tsv\" -d output/ >> {log.log_out} 2>> {log.log_error}")
 		shell("awk -F \"\t\" '{{print $18\"\t\"$19\"\t\"$20\"\t\"$21\"\t\"$22\"\t\"$23}}' output/Taxon.tsv > {output}")
 
 rule create_database:
@@ -78,8 +81,8 @@ rule create_database:
 		fasta = "output/BOLD/bold_all_sequences_taxonomy.fa",
 		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.nhr"
 	log:
-		log_error = "logs/log_error.txt",
-		log_out = "logs/log_stdout.txt"
+		log_error = "output/logs/log_error.txt",
+		log_out = "output/logs/log_stdout.txt"
 	run:
 		#shell("cat {input.gbif_taxonomy}")
 		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
@@ -93,8 +96,8 @@ rule create_filtered_database:
 		fasta_nodups = "output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa",
 		blastdb = "output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nhr"
 	log:
-		log_error = "logs/log_error.txt",
-		log_out = "logs/log_stdout.txt"
+		log_error = "output/logs/log_error.txt",
+		log_out = "output/logs/log_stdout.txt"
 	run:
 		shell("python filter_bold_for_species.py -b {input} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups} >> {log.log_out} 2>> {log.log_error}")
