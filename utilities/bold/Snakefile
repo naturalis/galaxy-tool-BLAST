@@ -10,34 +10,71 @@ rule all:
 		#"simplecheck_bold_taxonomy_log.txt"
 		"output/BOLD/bold_all_sequences_taxonomy.fa"
 
-rule bold:
+rule get_data:
 	output:
-		"output/BOLD/bold_all_sequences_taxonomy.fa"
+		output_sequences = "output/bold_all_sequences.fa",
+		output_taxonomy = "output/bold_all_taxonomy.tsv"
 	params:
-		arthropoda_fasta=config["arthropoda"]["fasta"],
-		arthropoda_taxonomy=config["arthropoda"]["taxonomy"]
+		arthropoda_fasta = config["arthropoda"]["fasta"],
+		arthropoda_taxonomy = config["arthropoda"]["taxonomy"],
+		fasta_folder = "output/bold_fasta_files",
+		taxonomy_folder = "output/bold_taxonomy_files"
 	run:
-		shell("sh get_bold_sequences.sh output/bold_fasta_files")
+		shell("sh get_bold_sequences.sh {params.fasta_folder}")
 		#Arthropoda fasta file is a known problem
-		shell("rm -f output/bold_fasta_files/Arthropoda_sequences.fasta")
+		shell("rm -f {params.fasta_folder}/Arthropoda_sequences.fasta")
 		#Copy manual downloaded Arthropoda fasta file to download folder
-		shell("cp {params.arthropoda_fasta} output/bold_fasta_files/Arthropoda_sequences_manual.fasta")
-		shell("cat output/bold_fasta_files/* > output/BOLD/bold_all_sequences.fa")
-		shell("sh get_bold_taxonomy.sh output/bold_taxonomy_files")
+		shell("cp {params.arthropoda_fasta} {params.fasta_folder}/Arthropoda_sequences_manual.fasta")
+		shell("cat {params.fasta_folder}/* > {output.output_sequences}")
+		shell("sh get_bold_taxonomy.sh {params.taxonomy_folder}")
 		#Arthropoda taxonomy file is a known problem
-		shell("rm -f output/bold_taxonomy_files/Arthropoda_taxonomy.tsv")
-		shell("cp {params.arthropoda_taxonomy} output/bold_taxonomy_files/Arthropoda_taxonomy_manual.tsv")
-		shell("cat output/bold_taxonomy_files/* > output/BOLD/bold_all_taxonomy.tsv")
-		#The BOLD API can give strange output, this is a quick check for that
-		shell("sh simplecheck_bold_sequences.sh output/bold_fasta_files output/simplecheck_bold_sequences_log.txt")
-		shell("sh simplecheck_bold_taxonomy.sh output/bold_taxonomy_files output/simplecheck_bold_taxonomy_log.txt")
-		shell("sed -e '/^[^>]/ s/-//g' output/BOLD/bold_all_sequences.fa > output/BOLD/bold_all_sequences_filtered.fa")
-		shell("awk -F \"\t\" '{{print $1\"\t\"$10\"\t\"$12\"\t\"$14\"\t\"$16\"\t\"$20\"\t\"$22}}' output/BOLD/bold_all_taxonomy.tsv > output/BOLD/bold_all_taxonomy_filtered.tsv")
-		shell("wget -P output/BOLD http://rs.gbif.org/datasets/backbone/backbone-current.zip")
-		shell("unzip -j output/BOLD/backbone-current.zip \"Taxon.tsv\"")
-		shell("awk -F \"\t\" '{{print $18\"\t\"$19\"\t\"$20\"\t\"$21\"\t\"$22\"\t\"$23}}' output/BOLD/Taxon.tsv > output/BOLD/gbif_taxonomy.tsv")
-		shell("python add_taxonomy_bold.py -t output/BOLD/bold_all_taxonomy_filtered.tsv -g output/BOLD/gbif_taxonomy.tsv -b output/BOLD/bold_all_sequences_filtered.fa -o output/BOLD/bold_all_sequences_taxonomy.fa")
-
+		shell("rm -f {params.taxonomy_folder}/Arthropoda_taxonomy.tsv")
+		shell("cp {params.arthropoda_taxonomy} {params.taxonomy_folder}/Arthropoda_taxonomy_manual.tsv")
+		shell("cat {params.taxonomy_folder}/* > {output.output_taxonomy}")
 		#Do not uncomment these lines while developing
 		#shell("rm -rf bold_fasta_files")
 		#shell("rm -rf bold_taxonomy_files")
+
+rule filter_and_check_sequences:
+	input:
+		rules.get_data.output.output_sequences
+	output:
+		fasta = "output/bold_all_sequences_filtered.fa",
+		log = "output/simplecheck_bold_sequences_log.txt"
+	params:
+		fasta_folder = "output/bold_fasta_files"
+	run:
+		#The BOLD API can give strange output, this is a quick check for that
+		shell("sh simplecheck_bold_sequences.sh {params.fasta_folder} {output.log}")
+		shell("sed -e '/^[^>]/ s/-//g' {input} > {output.fasta}")
+
+rule filter_and_check_taxonomy:
+	input:
+		rules.get_data.output.output_taxonomy
+	output:
+		taxonomy = "output/bold_all_taxonomy_filtered.tsv",
+		log = "output/simplecheck_bold_taxonomy_log.txt"
+	params:
+		taxonomy_folder = "output/bold_fasta_files"
+	run:
+		shell("sh simplecheck_bold_taxonomy.sh {params.taxonomy_folder} {output.log}")
+		shell("awk -F \"\t\" '{{print $1\"\t\"$10\"\t\"$12\"\t\"$14\"\t\"$16\"\t\"$20\"\t\"$22}}' {input} > {output.taxonomy}")
+
+rule gbif_taxonomy:
+	output:
+		"output/gbif_taxonomy.tsv"
+	run:
+		shell("wget -P output http://rs.gbif.org/datasets/backbone/backbone-current.zip")
+		shell("unzip -j output/backbone-current.zip \"Taxon.tsv\" -d output/")
+		shell("awk -F \"\t\" '{{print $18\"\t\"$19\"\t\"$20\"\t\"$21\"\t\"$22\"\t\"$23}}' output/Taxon.tsv > {output}")
+
+rule final_database:
+	input:
+		bold_taxonomy = rules.filter_and_check_taxonomy.output.taxonomy
+		gbif_taxonomy = rules.gbif_taxonomy.output
+		bold_sequences = rules.filter_and_check_sequences.output.fasta
+	output:
+		fasta = "output/BOLD/bold_all_sequences_taxonomy.fa"
+	run:
+		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_taxonomy} -o {output.fasta}")
+		shell("makeblastdb2.8.0 -in bold_all_sequences_taxonomy.fa -dbtype nucl")
