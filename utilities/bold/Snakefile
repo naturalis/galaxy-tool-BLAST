@@ -5,10 +5,7 @@ configfile: "config.yml"
 
 rule all:
 	input:
-		#"output/BOLD/bold_all_sequences_taxonomy.fa",
-		#"output/BOLD/bold_all_taxonomy.tsv",
-		#"simplecheck_bold_taxonomy_log.txt"
-		"output/BOLD/bold_all_sequences_taxonomy.fa"
+		"output/BOLD/bold_all_sequences_taxonomy.fa.nhr"
 
 rule get_data:
 	output:
@@ -20,16 +17,16 @@ rule get_data:
 		fasta_folder = "output/bold_fasta_files",
 		taxonomy_folder = "output/bold_taxonomy_files"
 	run:
-		shell("sh get_bold_sequences.sh {params.fasta_folder}")
+		#shell("sh get_bold_sequences.sh {params.fasta_folder}")
 		#Arthropoda fasta file is a known problem
-		shell("rm -f {params.fasta_folder}/Arthropoda_sequences.fasta")
+		#shell("rm -f {params.fasta_folder}/Arthropoda_sequences.fasta")
 		#Copy manual downloaded Arthropoda fasta file to download folder
-		shell("cp {params.arthropoda_fasta} {params.fasta_folder}/Arthropoda_sequences_manual.fasta")
+		#shell("cp {params.arthropoda_fasta} {params.fasta_folder}/Arthropoda_sequences_manual.fasta")
 		shell("cat {params.fasta_folder}/* > {output.output_sequences}")
-		shell("sh get_bold_taxonomy.sh {params.taxonomy_folder}")
+		#shell("sh get_bold_taxonomy.sh {params.taxonomy_folder}")
 		#Arthropoda taxonomy file is a known problem
-		shell("rm -f {params.taxonomy_folder}/Arthropoda_taxonomy.tsv")
-		shell("cp {params.arthropoda_taxonomy} {params.taxonomy_folder}/Arthropoda_taxonomy_manual.tsv")
+		#shell("rm -f {params.taxonomy_folder}/Arthropoda_taxonomy.tsv")
+		#shell("cp {params.arthropoda_taxonomy} {params.taxonomy_folder}/Arthropoda_taxonomy_manual.tsv")
 		shell("cat {params.taxonomy_folder}/* > {output.output_taxonomy}")
 		#Do not uncomment these lines while developing
 		#shell("rm -rf bold_fasta_files")
@@ -55,14 +52,14 @@ rule filter_and_check_taxonomy:
 		taxonomy = "output/bold_all_taxonomy_filtered.tsv",
 		log = "output/simplecheck_bold_taxonomy_log.txt"
 	params:
-		taxonomy_folder = "output/bold_fasta_files"
+		taxonomy_folder = "output/bold_taxonomy_files"
 	run:
 		shell("sh simplecheck_bold_taxonomy.sh {params.taxonomy_folder} {output.log}")
 		shell("awk -F \"\t\" '{{print $1\"\t\"$10\"\t\"$12\"\t\"$14\"\t\"$16\"\t\"$20\"\t\"$22}}' {input} > {output.taxonomy}")
 
 rule gbif_taxonomy:
 	output:
-		"output/gbif_taxonomy.tsv"
+		gbif_taxonomy = "output/gbif_taxonomy.tsv"
 	run:
 		shell("wget -P output http://rs.gbif.org/datasets/backbone/backbone-current.zip")
 		shell("unzip -j output/backbone-current.zip \"Taxon.tsv\" -d output/")
@@ -70,11 +67,13 @@ rule gbif_taxonomy:
 
 rule final_database:
 	input:
-		bold_taxonomy = rules.filter_and_check_taxonomy.output.taxonomy
-		gbif_taxonomy = rules.gbif_taxonomy.output
+		bold_taxonomy = rules.filter_and_check_taxonomy.output.taxonomy,
+		gbif_taxonomy = rules.gbif_taxonomy.output.gbif_taxonomy,
 		bold_sequences = rules.filter_and_check_sequences.output.fasta
 	output:
-		fasta = "output/BOLD/bold_all_sequences_taxonomy.fa"
+		fasta = "output/BOLD/bold_all_sequences_taxonomy.fa",
+		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.nhr"
 	run:
-		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_taxonomy} -o {output.fasta}")
-		shell("makeblastdb2.8.0 -in bold_all_sequences_taxonomy.fa -dbtype nucl")
+		#shell("cat {input.gbif_taxonomy}")
+		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta}")
+		shell("makeblastdb -in {output.fasta} -dbtype nucl")
