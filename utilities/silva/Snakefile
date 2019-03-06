@@ -1,0 +1,32 @@
+from subprocess import call, Popen, PIPE
+import re
+
+rule all:
+	input:
+		"output/SILVA_132_SSUParc_tax_silva.fasta",
+        "output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta.nal"
+
+rule download_silva_ssuparc_fasta:
+    output:
+        fasta = "output/SILVA_132_SSUParc_tax_silva.fasta"
+    run:
+        shell("wget -P output https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/SILVA_132_SSUParc_tax_silva.fasta.gz")
+        shell("zcat output/SILVA_132_SSUParc_tax_silva.fasta.gz > {output.fasta}")
+
+rule download_silva_ssuparc_taxonomy:
+    output:
+        taxonomy = "output/taxmap_slv_ssu_parc_132.txt"
+    run:
+        shell("wget -P output https://www.arb-silva.de/fileadmin/silva_databases/current/Exports/taxonomy/taxmap_slv_ssu_parc_132.txt.gz")
+        shell("zcat output/taxmap_slv_ssu_parc_132.txt.gz > {output.taxonomy}")
+
+rule make_database:
+    input:
+        fasta = rules.download_silva_ssuparc_fasta.output.fasta,
+        taxonomy = rules.download_silva_ssuparc_taxonomy.output.taxonomy
+    output:
+        silva = "output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta",
+        db = "output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta.nal"
+    run:
+        shell("python add_taxonomy_silva.py -f {input.fasta} -t {input.taxonomy} -o {output.silva}")
+        shell("makeblastdb -in {output.silva} -dbtype nucl")
