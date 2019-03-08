@@ -5,90 +5,97 @@ from Bio import SeqIO
 
 rule all:
 	input:
-		#protected("output/genbank/nt"),
-		#protected("output/NT/accession_taxonid")
-		#"output/CO1/CO1.fa",
-		#"output/ITS/ITS.fa",
-		#"output/12S/12S.fa",
-		#"output/16S/16S.fa",
-		#"output/matK/matK.fa",
-		#"output/rbcL/rbcL.fa",
-		#"output/CO1/CO1.map",
-		#"output/ITS/ITS.map",
-		#"output/12S/12S.map",
-		#"output/16S/16S.map",
-		#"output/matK/matK.map",
-		#"output/rbcL/rbcL.map",
-		#"output/CO1/CO1.fa.nhr",
-		#"output/ITS/ITS.fa.nhr",
-		#"output/12S/12S.fa.nhr",
-		#"output/16S/16S.fa.01.nhr",
-		#"output/matK/matK.fa.01.nhr",
-		#"output/rbcL/rbcL.fa.nhr",
+		#protected("output/NT/nt"),
+		protected("output/NT/accession_taxonid"),
+		protected("output/NT/nucl_gb.accession2taxid"),
+		"output/CO1/CO1.fa",
+		"output/ITS/ITS.fa",
+		"output/12S/12S.fa",
+		"output/16S/16S.fa",
+		"output/matK/matK.fa",
+		"output/rbcL/rbcL.fa",
+		"output/CO1/CO1.map",
+		"output/ITS/ITS.map",
+		"output/12S/12S.map",
+		"output/16S/16S.map",
+		"output/matK/matK.map",
+		"output/rbcL/rbcL.map",
+		"output/CO1/CO1.fa.nhr",
+		"output/ITS/ITS.fa.nhr",
+		"output/12S/12S.fa.nhr",
+		"output/16S/16S.fa.01.nhr",
+		"output/matK/matK.fa.01.nhr",
+		"output/rbcL/rbcL.fa.nhr",
 		#"output/NT/taxidlineage.dmp",
-		"output/bacterial_genome_selection/bacterial_genome_selection.fa"
+		#"output/bacterial_genome_selection/bacterial_genome_selection.fa"
 
-
-
-
-
-"""
 rule download_nt_fasta:
 	output:
-		#protected("output/genbank/nt"),
-		protected("output/NT/accession_taxonid")
+		nt = protected("output/NT/nt"),
+		accession_taxonid = protected("output/NT/accession_taxonid"),
+		nucl_gb = ("output/NT/nucl_gb.accession2taxid")
 	run:
 		#shell("wget -P output/NT ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz")
 		#shell("gunzip output/NT/nt.gz")
 		shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz")
 		shell("gunzip output/NT/nucl_gb.accession2taxid.gz")
-		shell("sed '1d' output/NT/nucl_gb.accession2taxid | awk '{{print $2\" \"$3}}' > output/NT/accession_taxonid")
+		shell("sed '1d' {output.nucl_gb} | awk '{{print $2\" \"$3}}' > {output.accession_taxonid}")
 
 rule create_CO1:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/CO1/CO1.fa"
+		CO1 = "output/CO1/CO1.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/CO1/CO1.fa",'a') as newco1file:
+		with open(input.nt, "rU") as handle, open(output.CO1,'a') as newco1file:
         for record in SeqIO.parse(handle, "fasta"):
             if "co1" in str(record.description.lower()) or "coi" in str(record.description.lower()) or "cox" in str(record.description.lower()) or "cytochrome c oxidase" in str(record.description.lower()) or "cytochrome oxidase" in str(record.description.lower()):
                 newco1file.write(">"+str(record.description)+"\n")
                 newco1file.write(str(record.seq)+"\n")
 
 rule create_ITS:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/ITS/ITS.fa"
+		ITS = "output/ITS/ITS.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/ITS/ITS.fa",'a') as newitsfile:
+		with open(input.nt, "rU") as handle, open(output.ITS,'a') as newitsfile:
         for record in SeqIO.parse(handle, "fasta"):
             if "internal transcribed spacer" in str(record.description).lower() or "its" in str(record.description).lower() or "5.8" in str(record.description).lower():
                 newitsfile.write(">"+str(record.description)+"\n")
                 newitsfile.write(str(record.seq)+"\n")
 
 rule create_12S:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/12S/12S.fa"
+		fa12S = "output/12S/12S.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/12S/12S.fa",'a') as new12sfile:
+		with open(input.nt, "rU") as handle, open(output.fa12S,'a') as new12sfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				if "12S" in str(record.description).lower() or "mitochondrial" in str(record.description).lower():
 					new12sfile.write(">"+str(record.description)+"\n")
 					new12sfile.write(str(record.seq)+"\n")
 
 rule create_16S:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/16S/16S.fa"
+		fa16S = "output/16S/16S.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/16S/16S.fa",'a') as new16sfile:
+		with open(input.nt, "rU") as handle, open(output.fa16S,'a') as new16sfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				if "16s" in str(record.description).lower() or "mitochondrial" in str(record.description).lower() or "mitochondrion" in str(record.description).lower():
 					new16sfile.write(">"+str(record.description)+"\n")
 					new16sfile.write(str(record.seq)+"\n")
 
 rule create_matK:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/matK/matK.fa"
+		matk = "output/matK/matK.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/matK/matK.fa", 'a') as newfile:
+		with open(input.nt, "rU") as handle, open(output.matk, 'a') as newfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				des = str(record.description.lower())
 				if ("chloroplast" in des or "matk" in des or "maturase" in des or "bac" in des):
@@ -96,10 +103,12 @@ rule create_matK:
 					newfile.write(str(record.seq) + "\n")
 
 rule create_rbcL:
+	input:
+		nt = rules.download_nt_fasta.output.nt
 	output:
-		"output/rbcL/rbcL.fa"
+		rbcl = "output/rbcL/rbcL.fa"
 	run:
-		with open("output/NT/nt", "rU") as handle, open("output/rbcL/rbcL.fa", 'a') as newfile:
+		with open(input.nt, "rU") as handle, open(output.rbcl, 'a') as newfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				des = str(record.description.lower())
 				if ("ribulose-1,5-bisphosphate carboxylase/oxygenase" in des or "rbcl" in des or "chloroplast" in des or "plastid" in des):
@@ -108,135 +117,137 @@ rule create_rbcL:
 
 rule create_mapping_file_CO1:
 	input:
-		fasta = "output/CO1/CO1.fa",
-		accessions = "output/NT/accession_taxonid"
+		fasta = rules.create_CO1.output.CO1,
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/CO1/CO1.map"
+		CO1map = "output/CO1/CO1.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.CO1map}")
 
 rule create_mapping_file_ITS:
 	input:
-		fasta = "output/ITS/ITS.fa",
-		accessions = "output/NT/accession_taxonid"
+		fasta = rules.create_ITS.output.ITS,
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/ITS/ITS.map"
+		ITSmap = "output/ITS/ITS.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.ITSmap}")
 
 rule create_mapping_file_12S:
 	input:
-		fasta = "output/12S/12S.fa",
-		accessions = "output/NT/accession_taxonid"
+		fasta = rules.create_12S.output.fa12S,
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/12S/12S.map"
+		s12Smap = "output/12S/12S.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.s12Smap}")
 
 rule create_mapping_file_16S:
 	input:
 		#"fake input to avoid parallel processing"
 		CO1map = "output/CO1/CO1.map",
-		ITSmap"output/ITS/ITS.map",
-		12Smap = "output/12S/12S.map",
-		fasta = "output/16S/16S.fa",
-		accessions = "output/NT/accession_taxonid"
+		ITSmap = "output/ITS/ITS.map",
+		s12Smap = "output/12S/12S.map",
+		fasta = rules.create_16S.output.fa16S,
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/16S/16S.map"
+		s16Smap = "output/16S/16S.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.s16Smap}")
 
 rule create_mapping_file_matK:
 	input:
 		#"fake input to avoid parallel processing"
 		CO1map = "output/CO1/CO1.map",
 		ITSmap = "output/ITS/ITS.map",
-		12Smap = "output/12S/12S.map",
+		s12Smap = "output/12S/12S.map",
 		fasta = "output/matK/matK.fa",
-		accessions = "output/NT/accession_taxonid"
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/matK/matK.map"
+		matKmap = "output/matK/matK.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.matKmap}")
 
 rule create_mapping_file_rbcL:
 	input:
 		fasta = "output/rbcL/rbcL.fa",
-		accessions = "output/NT/accession_taxonid"
+		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
-		"output/rbcL/rbcL.map"
+		rbcLmap = "output/rbcL/rbcL.map"
 	run:
-		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output}")
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.rbcLmap}")
 
 rule make_blast_database_CO1:
 	input:
-		fasta = "output/CO1/CO1.fa",
-		mapping = "output/CO1/CO1.map"
+		fasta = rules.create_CO1.output.CO1,
+		mapping = rules.create_mapping_file_CO1.output.CO1map
 	output:
-		"output/CO1/CO1.fa.nhr"
+		db = "output/CO1/CO1.fa.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
 rule make_blast_database_ITS:
 	input:
-		fasta = "output/ITS/ITS.fa",
-		mapping = "output/ITS/ITS.map"
+		fasta = rules.create_ITS.output.ITS,
+		mapping = rules.create_mapping_file_ITS.output.ITSmap
 	output:
-		"output/ITS/ITS.fa.nhr"
+		db = "output/ITS/ITS.fa.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
 rule make_blast_database_12S:
 	input:
-		fasta = "output/12S/12S.fa",
-		mapping = "output/12S/12S.map"
+		fasta = rules.create_12S.output.fa12S,
+		mapping = rules.create_mapping_file_12S.output.s12Smap
 	output:
-		"output/12S/12S.fa.nhr"
+		db = "output/12S/12S.fa.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
 rule make_blast_database_16S:
 	input:
 		#"fake input to avoid parallel processing to save memory"
-		CO1 = "output/CO1/CO1.fa.nhr",
-		ITS = "output/ITS/ITS.fa.nhr",
-		db12S = "output/12S/12S.fa.nhr",
-		fasta = "output/16S/16S.fa",
-		mapping = "output/16S/16S.map"
+		CO1 = rules.make_blast_database_CO1.output.db,
+		ITS = rules.make_blast_database_ITS.output.db,
+		db12S = rules.make_blast_database_12S.output.db,
+		fasta = rules.create_16S.output.fa16S,
+		mapping = rules.create_mapping_file_16S.output.s16Smap
 	output:
-		"output/16S/16S.fa.01.nhr"
+		db = "output/16S/16S.fa.01.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
 rule make_blast_database_matK:
 	input:
-		db16S = "output/16S/16S.fa.01.nhr",
-		fasta = "output/matK/matK.fa",
-		mapping = "output/matK/matK.map"
+		db16S = rules.make_blast_database_16S.output.db,
+		fasta = rules.create_matK.output.matk,
+		mapping = rules.create_mapping_file_matK.output.matKmap
 	output:
-		"output/matK/matK.fa.01.nhr"
+		db = "output/matK/matK.fa.01.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
 rule make_blast_database_rbcL:
 	input:
 		#"fake input to avoid parallel processing to save memory"
-		matK = "output/matK/matK.fa.01.nhr",
-		fasta = "output/rbcL/rbcL.fa",
-		mapping = "output/rbcL/rbcL.map"
+		matK = rules.make_blast_database_matK.output.db,
+		fasta = rules.create_rbcL.output.rbcl,
+		mapping = rules.create_mapping_file_rbcL.output.rbcLmap
 	output:
 		"output/rbcL/rbcL.fa.nhr"
 	run:
-		shell("../../../ncbi-blast-2.8.0+/bin/makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 """
 rule bacterial_genome:
 	input:
-		nt = "output/NT/nt",
-		accession2taxid = "output/NT/nucl_gb.accession2taxid"
+		nt = rules.download_nt_fasta.output.nt,
+		accession2taxid = rules.download_nt_fasta.output.nucl_gb,
 	output:
 		protected("output/bacterial_genome_selection/bacterial_genome_selection.fa")
 	run:
-		#shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip")
-		#shell("unzip -j output/NT/new_taxdump.zip \"taxidlineage.dmp\" -d output/NT/")
-		#shell("python get_accession_of_taxonid.py -t output/NT/taxidlineage.dmp -i 2 -a output/NT/nucl_gb.accession2taxid -o output/NT/bacterial_accessions")
+		shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip")
+		shell("unzip -j output/NT/new_taxdump.zip \"taxidlineage.dmp\" -d output/NT/")
+		shell("python get_accession_of_taxonid.py -t output/NT/taxidlineage.dmp -i 2 -a output/NT/nucl_gb.accession2taxid -o output/NT/bacterial_accessions")
 		shell("python bacterial_genome_selection.py -db output/NT/nt -a output/NT/bacterial_accessions -o output/bacterial_genome_selection/bacterial_genome_selection.fa")
+
+"""
