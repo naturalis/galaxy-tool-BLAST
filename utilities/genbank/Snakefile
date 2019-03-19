@@ -5,29 +5,35 @@ from Bio import SeqIO
 
 rule all:
 	input:
-		#protected("output/NT/nt"),
+		protected("output/NT/nt"),
 		protected("output/NT/accession_taxonid"),
 		protected("output/NT/nucl_gb.accession2taxid"),
 		"output/CO1/CO1.fa",
 		"output/ITS/ITS.fa",
 		"output/12S/12S.fa",
+		"output/18S/18S.fa",
 		"output/16S/16S.fa",
 		"output/matK/matK.fa",
 		"output/rbcL/rbcL.fa",
+		"output/trnl/trnl.fa",
 		"output/CO1/CO1.map",
 		"output/ITS/ITS.map",
 		"output/12S/12S.map",
+		"output/18S/18S.map",
 		"output/16S/16S.map",
 		"output/matK/matK.map",
 		"output/rbcL/rbcL.map",
+		"output/trnl/trnl.map",
 		"output/CO1/CO1.fa.nhr",
 		"output/ITS/ITS.fa.nhr",
 		"output/12S/12S.fa.nhr",
+		"output/18S/18S.fa.nhr",
 		"output/16S/16S.fa.01.nhr",
 		"output/matK/matK.fa.01.nhr",
 		"output/rbcL/rbcL.fa.nhr",
+		"output/trnl/trnl.fa.nhr",
 		#"output/NT/taxidlineage.dmp",
-		#"output/bacterial_genome_selection/bacterial_genome_selection.fa"
+		"output/bacterial_genome_selection/bacterial_genome_selection.fa"
 
 rule download_nt_fasta:
 	output:
@@ -35,8 +41,8 @@ rule download_nt_fasta:
 		accession_taxonid = protected("output/NT/accession_taxonid"),
 		nucl_gb = ("output/NT/nucl_gb.accession2taxid")
 	run:
-		#shell("wget -P output/NT ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz")
-		#shell("gunzip output/NT/nt.gz")
+		shell("wget -P output/NT ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz")
+		shell("gunzip output/NT/nt.gz")
 		shell("wget -P output/NT ftp://ftp.ncbi.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz")
 		shell("gunzip output/NT/nucl_gb.accession2taxid.gz")
 		shell("sed '1d' {output.nucl_gb} | awk '{{print $2\" \"$3}}' > {output.accession_taxonid}")
@@ -73,9 +79,21 @@ rule create_12S:
 	run:
 		with open(input.nt, "rU") as handle, open(output.fa12S,'a') as new12sfile:
 			for record in SeqIO.parse(handle, "fasta"):
-				if "12S" in str(record.description).lower() or "mitochondrial" in str(record.description).lower():
+				if "12s" in str(record.description).lower() or "mitochondrial" in str(record.description).lower():
 					new12sfile.write(">"+str(record.description)+"\n")
 					new12sfile.write(str(record.seq)+"\n")
+
+rule create_18S:
+	input:
+		nt = rules.download_nt_fasta.output.nt
+	output:
+		fa18S = "output/18S/18S.fa"
+	run:
+		with open(input.nt, "rU") as handle, open(output.fa18S,'a') as new18sfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				if "18s" in str(record.description).lower() or "small subunit" in str(record.description).lower():
+					new18sfile.write(">"+str(record.description)+"\n")
+					new18sfile.write(str(record.seq)+"\n")
 
 rule create_16S:
 	input:
@@ -115,6 +133,19 @@ rule create_rbcL:
 					newfile.write(">" + str(record.description) + "\n")
 					newfile.write(str(record.seq) + "\n")
 
+rule create_trnl:
+	input:
+		nt = rules.download_nt_fasta.output.nt
+	output:
+		trnl = "output/trnl/trnl.fa"
+	run:
+		with open(input.nt, "rU") as handle, open(output.trnl, 'a') as newfile:
+			for record in SeqIO.parse(handle, "fasta"):
+				des = str(record.description.lower())
+				if ("trnl" in des or "chloroplast" in des or "plastid" in des or "tRNA-Leu" in des or "trnF" in des or "trnT" in des):
+					newfile.write(">" + str(record.description) + "\n")
+					newfile.write(str(record.seq) + "\n")
+
 rule create_mapping_file_CO1:
 	input:
 		fasta = rules.create_CO1.output.CO1,
@@ -142,12 +173,22 @@ rule create_mapping_file_12S:
 	run:
 		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.s12Smap}")
 
+rule create_mapping_file_18S:
+	input:
+		fasta = rules.create_18S.output.fa18S,
+		accessions = rules.download_nt_fasta.output.accession_taxonid
+	output:
+		s18Smap = "output/18S/18S.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.s18Smap}")
+
 rule create_mapping_file_16S:
 	input:
 		#"fake input to avoid parallel processing"
 		CO1map = "output/CO1/CO1.map",
 		ITSmap = "output/ITS/ITS.map",
 		s12Smap = "output/12S/12S.map",
+		s18Smap = "output/18S/18S.map",
 		fasta = rules.create_16S.output.fa16S,
 		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
@@ -161,6 +202,7 @@ rule create_mapping_file_matK:
 		CO1map = "output/CO1/CO1.map",
 		ITSmap = "output/ITS/ITS.map",
 		s12Smap = "output/12S/12S.map",
+		s18Smap = "output/18S/18S.map",
 		fasta = "output/matK/matK.fa",
 		accessions = rules.download_nt_fasta.output.accession_taxonid
 	output:
@@ -176,6 +218,15 @@ rule create_mapping_file_rbcL:
 		rbcLmap = "output/rbcL/rbcL.map"
 	run:
 		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.rbcLmap}")
+
+rule create_mapping_file_trnl:
+	input:
+		fasta = "output/trnl/trnl.fa",
+		accessions = rules.download_nt_fasta.output.accession_taxonid
+	output:
+		trnlmap = "output/trnl/trnl.map"
+	run:
+		shell("python create_mapping_file.py -f {input.fasta} -m {input.accessions} -o {output.trnlmap}")
 
 rule make_blast_database_CO1:
 	input:
@@ -201,6 +252,15 @@ rule make_blast_database_12S:
 		mapping = rules.create_mapping_file_12S.output.s12Smap
 	output:
 		db = "output/12S/12S.fa.nhr"
+	run:
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+
+rule make_blast_database_18S:
+	input:
+		fasta = rules.create_18S.output.fa18S,
+		mapping = rules.create_mapping_file_18S.output.s18Smap
+	output:
+		db = "output/18S/18S.fa.nhr"
 	run:
 		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
 
@@ -237,7 +297,18 @@ rule make_blast_database_rbcL:
 		"output/rbcL/rbcL.fa.nhr"
 	run:
 		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
-"""
+
+rule make_blast_database_trnl:
+	input:
+		#"fake input to avoid parallel processing to save memory"
+		matK = rules.make_blast_database_matK.output.db,
+		fasta = rules.create_trnl.output.trnl,
+		mapping = rules.create_mapping_file_trnl.output.trnlmap
+	output:
+		"output/trnl/trnl.fa.nhr"
+	run:
+		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+
 rule bacterial_genome:
 	input:
 		nt = rules.download_nt_fasta.output.nt,
@@ -249,5 +320,3 @@ rule bacterial_genome:
 		shell("unzip -j output/NT/new_taxdump.zip \"taxidlineage.dmp\" -d output/NT/")
 		shell("python get_accession_of_taxonid.py -t output/NT/taxidlineage.dmp -i 2 -a output/NT/nucl_gb.accession2taxid -o output/NT/bacterial_accessions")
 		shell("python bacterial_genome_selection.py -db output/NT/nt -a output/NT/bacterial_accessions -o output/bacterial_genome_selection/bacterial_genome_selection.fa")
-
-"""
