@@ -28,3 +28,7 @@ git clone https://github.com/naturalis/galaxy-tool-BLAST
 ```
 chmod 777 galaxy-tool-BLAST/blastn_wrapper.py
 ```
+Add the following line to /home/galaxy/galaxy/config/tool_conf.xml
+```
+<tool file="/home/galaxy/Tools/galaxy-tool-BLAST/blastn.xml" />
+```
