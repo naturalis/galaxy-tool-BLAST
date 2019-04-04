@@ -1,7 +1,12 @@
 <tool id="blastn" name="Identify reads with blastn and find taxonomy">
     <description>blastn wrapper and taxonomy finder</description>
-    <command interpreter="bash">
-        blastn.sh
+    <requirements>
+        <requirement type="package" version="2.7">python</requirement>
+        <requirement type="package">biopython</requirement>
+    </requirements>
+    <command>
+        <![CDATA[
+        bash '$__tool_directory__/blastn.sh'
         $input_type.type
         $input_type.input
         $database_type.database
@@ -24,7 +29,7 @@
         $identity
         $blast_output_original
         $database_type.type
-
+        ]]>
     </command>
     <macros>
         <macro name="zip_file_input_macro">
@@ -37,7 +42,7 @@
             <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
                 <option value="none">None</option>
                 <option value="default">Taxonomy of the database from the hit</option>
-                <option value="GBIF" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option>
+                <!-- <option value="GBIF" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option> -->
             </param>
             <param name="coverage" type="float" label="Query Coverage percentage cutoff"  value="80" min="0.0" max="100"/>
         </macro>
