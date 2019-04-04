@@ -11,6 +11,12 @@ tar xzvf ncbi-blast-2.9.0+-x64-linux.tar.gz
 rm ncbi-blast-2.9.0+-x64-linux.tar.gz
 chmod 777 ncbi-blast-2.9.0+/bin/*
 ```
+Add the blast programs to /usr/local/bin for convenience
+```
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.9.0+/bin/makeblastdb /usr/local/bin/makeblastdb2.9.0
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.9.0+/bin/blastn /usr/local/bin/blastn2.9.0
+
+```
 ### Installing
 Installing the tool for use in Galaxy
 ```
