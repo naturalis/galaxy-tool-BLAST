@@ -22,7 +22,6 @@ def make_taxon_dict():
             species = x[-2]
             if accession not in taxonDict:
                 taxonDict[accession] = taxonomy+species
-    print "dictmade"
     return taxonDict
 
 def add_taxonomy(taxonDict):

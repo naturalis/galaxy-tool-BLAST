@@ -48,7 +48,7 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/galaxy/ExtraRef/blast_reference/bold/bold_26_11_2018_taxonomy_filtered.fa" label="bold">BOLD</option>
+            <option value="/home/galaxy/Tools/galaxy-tool-BLAST/utilities/silva/output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA</option>
             <!-- <option value="/home/galaxy/ExtraRef/blast_reference/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 21-08-2018)</option>
             <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSUParc_tax_silva_taxonomy.fasta">SILVA SSU Parc</option>
                     

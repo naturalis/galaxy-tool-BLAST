@@ -52,11 +52,14 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva):
 
 def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)
-    gbif = Gbif(args.taxonomy_db)
     bold = Bold(args.bold_db, args.taxonomy_db)
     privatebold = PrivateBold()
     unite = Unite()
     silva = Silva()
+    if args.taxonomy_source == "GBIF":
+        gbif = Gbif(args.taxonomy_db)
+    else:
+        gbif = ""
     files = [x for x in sorted(glob.glob(args.blastinputfolder.strip() + "/*.tabular"))]
     for file in files:
         add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva)
