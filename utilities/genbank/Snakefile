@@ -39,7 +39,7 @@ rule download_nt_fasta:
 	output:
 		nt = protected("output/NT/nt"),
 		accession_taxonid = protected("output/NT/accession_taxonid"),
-		nucl_gb = ("output/NT/nucl_gb.accession2taxid")
+		nucl_gb = protected("output/NT/nucl_gb.accession2taxid")
 	run:
 		shell("wget -P output/NT ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz")
 		shell("gunzip output/NT/nt.gz")
@@ -235,7 +235,7 @@ rule make_blast_database_CO1:
 	output:
 		db = "output/CO1/CO1.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_ITS:
 	input:
@@ -244,7 +244,7 @@ rule make_blast_database_ITS:
 	output:
 		db = "output/ITS/ITS.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_12S:
 	input:
@@ -253,7 +253,7 @@ rule make_blast_database_12S:
 	output:
 		db = "output/12S/12S.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_18S:
 	input:
@@ -262,7 +262,7 @@ rule make_blast_database_18S:
 	output:
 		db = "output/18S/18S.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_16S:
 	input:
@@ -275,7 +275,7 @@ rule make_blast_database_16S:
 	output:
 		db = "output/16S/16S.fa.01.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_matK:
 	input:
@@ -285,7 +285,7 @@ rule make_blast_database_matK:
 	output:
 		db = "output/matK/matK.fa.01.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_rbcL:
 	input:
@@ -296,7 +296,7 @@ rule make_blast_database_rbcL:
 	output:
 		"output/rbcL/rbcL.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_trnl:
 	input:
@@ -307,7 +307,7 @@ rule make_blast_database_trnl:
 	output:
 		"output/trnl/trnl.fa.nhr"
 	run:
-		shell("makeblastdb2.8.0 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids")
+		shell("makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule bacterial_genome:
 	input:
