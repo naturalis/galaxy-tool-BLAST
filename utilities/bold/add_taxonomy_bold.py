@@ -45,7 +45,7 @@ def make_kingdom_dict():
 
 
 def add_taxonomy(taxonDict, kingdomDict):
-    with open(args.bold, "r") as bold, open(args.output,"a") as output:
+    with open(args.bold, "r", encoding='windows-1252') as bold, open(args.output,"a") as output:
         for record in SeqIO.parse(bold, "fasta"):
             accession = str(record.description).split("|")[0]
             if accession in taxonDict:
@@ -64,8 +64,6 @@ def add_taxonomy(taxonDict, kingdomDict):
                     kingdom = "unknown kingdom"
                 output.write(">BOLD|"+accession+"|"+taxonDict[accession][-1]+"|"+kingdom+"|"+taxonDict[accession][1]+"|"+taxonDict[accession][2]+"|"+taxonDict[accession][3]+"|"+taxonDict[accession][4]+"|"+taxonDict[accession][5]+"|"+taxonDict[accession][-1]+"\n")
                 output.write(str(record.seq)+"\n")
-            else:
-                print accession+" no taxonomy"
 
 def main():
     taxonDict = make_taxon_dict()
