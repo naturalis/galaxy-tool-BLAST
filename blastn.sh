@@ -22,7 +22,7 @@ then
 #below the code to call the script to add taxonomy and move the files to the galaxy output
 elif [ $6 == "custom_taxonomy" ] && [ "${9}" != "none" ]
 then
-    $SCRIPTDIR"/blastn_add_taxonomy.py" -i $outlocation'/files/' -t /home/galaxy//Tools/galaxy-tool-BLAST/utilities/silva/output/SILVA/rankedlineage.dmp -m /home/galaxy/Tools/galaxy-tool-BLAST/utilities/silva/output/SILVA/merged.dmp -ts "${9}" -taxonomy_db $outlocation"/taxonomy_db2" -bold_db $outlocation"/bold_db"
+    $SCRIPTDIR"/blastn_add_taxonomy.py" -i $outlocation'/files/' -t /media/GalaxyData/blast_databases/taxonomy/rankedlineage.dmp -m /media/GalaxyData/blast_databases/taxonomy/merged.dmp -ts "${9}" -taxonomy_db $outlocation"/taxonomy_db2" -bold_db $outlocation"/bold_db"
     if [ $1 == "zip" ]
     then
         zip -r -j $outlocation"/blast_output.zip" $outlocation'/files/'*taxonomy_*'.tabular' --quiet
@@ -39,4 +39,4 @@ then
         fi
     fi
 fi
-#rm -rf $outlocation
+rm -rf $outlocation
