@@ -109,6 +109,7 @@ rule create_filtered_database:
 		log_out = "output/logs/log_stdout.txt"
 	run:
 		shell("python filter_bold_for_species.py -b {input} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
-		#shell("sed 's/ /_/g'")
+		shell("sed -i 's/ /_/g' {output.fasta}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
+		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
 		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl >> {log.log_out} 2>> {log.log_error}")
