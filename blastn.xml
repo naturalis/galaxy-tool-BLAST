@@ -48,28 +48,17 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/home/galaxy/Tools/galaxy-tool-BLAST/utilities/silva/output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA</option>
-            <!-- <option value="/home/galaxy/ExtraRef/blast_reference/CO1/CO1.fa" label="DatabaseCO1">CO1 (Genbank 21-08-2018)</option>
-            <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSUParc_tax_silva_taxonomy.fasta">SILVA SSU Parc</option>
-                    
-            <option value="/home/galaxy/ExtraRef/blast_reference/silva/SILVA_132_SSUParc_tax_silva.fasta">SILVA SSU 16S</option>
-            <option value="/media/GalaxyData/blast_references/ITS/ITS.fa" label="DatabaseITS">ITS (Genbank 21-08-2018)</option>
-            <option value="/media/GalaxyData/blast_references/MATK/matk.fa" label="DatabaseMATK">MATK (Genbank 21-08-2018)</option>
-	    <option value="/media/GalaxyData/blast_references/12S/12S.fa" label="Database12S">12S (Genbank 21-08-2018)</option>
-            <option value="/media/GalaxyData/blast_references/RBCL/rbcl.fa" label="DatabaseRBCL">rbcl (Genbank 21-08-2018)</option>
-	    <option value="/media/GalaxyData/blast_references/genbank/nt" label="DatabaseGenbank">Genbank (Genbank 21-08-2018)</option>
-            <option value="/media/GalaxyData/blast_references/bacterial_genome/bacterial_genome2_nodubs.fa" label="Databasebacterial">Bacterial genome selection (Genbank 21-08-2018)</option>
-	    <option value="/media/GalaxyData/blast_references/BOLD/BoLD_combined_filtered.fasta" label="BOLD">BOLD (04-08-2018)</option>
-            <option value="/media/GalaxyData/blast_references/NLGIM/NLGIM_header.fas" label="nlgim">NLGIM (09-08-2018)</option>
-            <option value="/media/GalaxyData/blast_references/waterscan/RefDB_BOLD.fa" label="waterscan">waterscan</option>
-            <option value="/media/GalaxyData/blast_references/waterscan/filtered_waterscan.fa" label="waterscanfiltered">waterscan (filtered)</option>
-            <option value="/media/GalaxyData/blast_references/UNITE/UNITE.fa" label="UNITE">UNITE (20-09-2018)</option>
-            <option value="/media/GalaxyData/blast_references/save_spiders/safeSpidersAll12.fa" label="safespiders">safeSpidersAll12 (No taxonomy)</option>
-            <option value="/media/GalaxyData/blast_references/NATURALIS_ITS/ITS_20181002.fas" label="itsnaturalis">ITS (NATURALIS 02-10-2018)</option>
-            <option value="/media/GalaxyData/blast_references/NATURALIS_MATK/MATK_20181002.fas" label="matknaturalis">MATK (NATURALIS 02-10-2018)</option>-->
-
-
-
+            <option value="/media/GalaxyData/blast_databases/BOLD/bold_all_sequences_taxonomy.fa" label="bold">BOLD (17-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa" label="boldnodups">BOLD species only no duplicates(17-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/16S/16S.fa" label="genbank16S">Genbank 16S (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/18S/18S.fa" label="genbank18S">Genbank 18S (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/ITS/ITS.fa" label="genbankits">Genbank ITS (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/blast_databases/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (15-04-2019)</option>
         </param>
         </macro>
         <macro name="user_input_fasta">
