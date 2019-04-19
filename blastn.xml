@@ -58,7 +58,7 @@
             <option value="/media/GalaxyData/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (15-04-2019)</option>
             <option value="/media/GalaxyData/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (15-04-2019)</option>
             <option value="/media/GalaxyData/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (15-04-2019)</option>
-            <option value="/media/GalaxyData/blast_databases/blast_databases/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (15-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (15-04-2019)</option>
         </param>
         </macro>
         <macro name="user_input_fasta">
