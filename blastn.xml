@@ -41,7 +41,7 @@
         <macro name="taxonomy_macro">
             <param name="taxonomy_method" type="select" multiple="false" label="Taxonomy source">
                 <option value="none">None</option>
-                <option value="default">Taxonomy of the database from the hit</option>
+                <option value="default" selected="true">Taxonomy of the database from the hit</option>
                 <!-- <option value="GBIF" selected="true">GBIF or Catalogue of Life (GBIF highest priority)</option> -->
             </param>
             <param name="coverage" type="float" label="Query Coverage percentage cutoff"  value="80" min="0.0" max="100"/>
