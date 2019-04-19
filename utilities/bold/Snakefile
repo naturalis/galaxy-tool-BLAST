@@ -95,7 +95,7 @@ rule create_database:
 	run:
 		#shell("cat {input.gbif_taxonomy}")
 		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
-		shell("makeblastdb -in {output.fasta} -dbtype nucl")
+		shell("makeblastdb -in {output.fasta} -dbtype nucl -blastdb_version 5")
 
 rule create_filtered_database:
 	input:
@@ -112,4 +112,4 @@ rule create_filtered_database:
 		shell("sed -i 's/ /_/g' {output.fasta}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
 		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
-		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl >> {log.log_out} 2>> {log.log_error}")
+		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 5 >> {log.log_out} 2>> {log.log_error}")
