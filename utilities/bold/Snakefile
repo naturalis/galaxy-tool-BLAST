@@ -5,21 +5,18 @@ configfile: "config.yml"
 
 rule all:
 	input:
-		"output/BOLD/bold_all_sequences_taxonomy.fa.nhr",
+		"output/BOLD/bold_all_sequences_taxonomy.fa.01.nhr",
 		"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nhr"
 
-rule get_data:
+rule get_sequence_data:
 	output:
 		output_sequences = "output/bold_all_sequences.fa",
-		output_taxonomy = "output/bold_all_taxonomy.tsv"
 	params:
 		arthropoda_fasta = config["arthropoda"]["fasta"],
-		arthropoda_taxonomy = config["arthropoda"]["taxonomy"],
 		fasta_folder = "output/bold_fasta_files",
-		taxonomy_folder = "output/bold_taxonomy_files"
 	log:
-		log_error = "output/logs/log_error.txt",
-		log_out = "output/logs/log_stdout.txt"
+		log_error = "output/logs/log_error_sequences.txt",
+		log_out = "output/logs/log_stdout_sequences.txt"
 	run:
 		shell("sh get_bold_sequences.sh {params.fasta_folder} >> {log.log_out} 2>> {log.log_error}")
 		#Arthropoda fasta file is a known problem
@@ -27,18 +24,30 @@ rule get_data:
 		#Copy manual downloaded Arthropoda fasta file to download folder
 		shell("cp {params.arthropoda_fasta} {params.fasta_folder}/Arthropoda_sequences_manual.fasta")
 		shell("cat {params.fasta_folder}/* > {output.output_sequences}")
+		#Do not uncomment these lines while developing
+		#shell("rm -rf bold_fasta_files")
+
+rule get_taxonomy_data:
+	output:
+		output_taxonomy = "output/bold_all_taxonomy.tsv"
+	params:
+		arthropoda_taxonomy = config["arthropoda"]["taxonomy"],
+		taxonomy_folder = "output/bold_taxonomy_files"
+	log:
+		log_error = "output/logs/log_error_taxonomy.txt",
+		log_out = "output/logs/log_stdout_taxonomy.txt"
+	run:
 		shell("sh get_bold_taxonomy.sh {params.taxonomy_folder} >> {log.log_out} 2>> {log.log_error}")
 		#Arthropoda taxonomy file is a known problem
 		shell("rm -f {params.taxonomy_folder}/Arthropoda_taxonomy.tsv")
 		shell("cp {params.arthropoda_taxonomy} {params.taxonomy_folder}/Arthropoda_taxonomy_manual.tsv")
 		shell("cat {params.taxonomy_folder}/* > {output.output_taxonomy}")
 		#Do not uncomment these lines while developing
-		#shell("rm -rf bold_fasta_files")
 		#shell("rm -rf bold_taxonomy_files")
 
 rule filter_and_check_sequences:
 	input:
-		rules.get_data.output.output_sequences
+		rules.get_sequence_data.output.output_sequences
 	output:
 		fasta = "output/bold_all_sequences_filtered.fa",
 		log = "output/logs/simplecheck_bold_sequences_log.txt"
@@ -51,7 +60,7 @@ rule filter_and_check_sequences:
 
 rule filter_and_check_taxonomy:
 	input:
-		rules.get_data.output.output_taxonomy
+		rules.get_taxonomy_data.output.output_taxonomy
 	output:
 		taxonomy = "output/bold_all_taxonomy_filtered.tsv",
 		log = "output/logs/simplecheck_bold_taxonomy_log.txt"
@@ -74,19 +83,19 @@ rule gbif_taxonomy:
 
 rule create_database:
 	input:
-		bold_taxonomy = rules.filter_and_check_taxonomy.output.taxonomy,
-		gbif_taxonomy = rules.gbif_taxonomy.output.gbif_taxonomy,
-		bold_sequences = rules.filter_and_check_sequences.output.fasta
+		bold_taxonomy = protected(rules.filter_and_check_taxonomy.output.taxonomy),
+		gbif_taxonomy = protected(rules.gbif_taxonomy.output.gbif_taxonomy),
+		bold_sequences = protected(rules.filter_and_check_sequences.output.fasta)
 	output:
-		fasta = "output/BOLD/bold_all_sequences_taxonomy.fa",
-		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.nhr"
+		fasta = protected("output/BOLD/bold_all_sequences_taxonomy.fa"),
+		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.01.nhr"
 	log:
 		log_error = "output/logs/log_error.txt",
 		log_out = "output/logs/log_stdout.txt"
 	run:
 		#shell("cat {input.gbif_taxonomy}")
 		shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
-		shell("makeblastdb -in {output.fasta} -dbtype nucl")
+		shell("makeblastdb -in {output.fasta} -dbtype nucl -blastdb_version 5")
 
 rule create_filtered_database:
 	input:
@@ -100,5 +109,7 @@ rule create_filtered_database:
 		log_out = "output/logs/log_stdout.txt"
 	run:
 		shell("python filter_bold_for_species.py -b {input} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
+		shell("sed -i 's/ /_/g' {output.fasta}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
-		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl >> {log.log_out} 2>> {log.log_error}")
+		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
+		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 5 >> {log.log_out} 2>> {log.log_error}")
