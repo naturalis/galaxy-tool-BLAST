@@ -5,8 +5,8 @@ configfile: "config.yml"
 
 rule all:
 	input:
-		"output/BOLD/bold_all_sequences_taxonomy.fa.nhr",
-		"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nhr"
+		"output/BOLD/bold_all_sequences_taxonomy.fa.nto",
+		"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nto"
 
 rule get_sequence_data:
 	output:
@@ -111,6 +111,6 @@ rule create_filtered_database:
 	run:
 		shell("python filter_bold_for_species.py -b {input} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
 		shell("sed -i 's/ /_/g' {output.fasta}")
-		#shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
+		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
 		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
 		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 5 >> {log.log_out} 2>> {log.log_error}")
