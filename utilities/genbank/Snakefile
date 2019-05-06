@@ -32,7 +32,7 @@ rule all:
 		"output/matK/matK.fa.01.nhr",
 		"output/rbcL/rbcL.fa.nhr",
 		"output/trnl/trnl.fa.nhr",
-		"output/NT/taxidlineage.dmp",
+		#"output/NT/taxidlineage.dmp",
 		"output/bacterial_genome_selection/bacterial_genome_selection.fa",
 		"output/bacterial_genome_selection/bacterial_genome_selection.fa.01.nhr",
 		"output/taxonomy/rankedlineage.dmp",

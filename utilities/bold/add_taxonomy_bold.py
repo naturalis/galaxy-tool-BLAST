@@ -15,15 +15,16 @@ def make_taxon_dict():
     with open(args.taxonomy,"r") as taxonomy:
         for x in taxonomy:
             x = x.strip().split("\t")
-            unknowns = ["unknown kingdom", "unknown phylum", "unknown class", "unknown order", "unknown family", "unknown genus", "unknown species"]
-            for known in unknowns[len(x):]:
-                x.append(known)
-            valueCount = 0
-            for value in x:
-                if not value:
-                    x[valueCount] = unknowns[valueCount]
-                valueCount += 1
-            taxonDict[x[0]] = x
+            if x[0] != "MDB2 Error: connect failedprocessid":
+                unknowns = ["unknown kingdom", "unknown phylum", "unknown class", "unknown order", "unknown family", "unknown genus", "unknown species"]
+                for known in unknowns[len(x):]:
+                    x.append(known)
+                valueCount = 0
+                for value in x:
+                    if not value:
+                        x[valueCount] = unknowns[valueCount]
+                    valueCount += 1
+                taxonDict[x[0]] = x
     return taxonDict
 
 def make_kingdom_dict():

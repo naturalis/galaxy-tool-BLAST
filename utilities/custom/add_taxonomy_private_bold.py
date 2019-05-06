@@ -1,10 +1,18 @@
 """
 """
 from Bio import SeqIO
+import argparse
+
+parser = argparse.ArgumentParser(description='')
+#>NLFLM009-12|Schoenoplectus lacustris|Magnoliophyta|Liliopsida|Poales|Cyperaceae|Schoenoplectus|Schoenoplectus lacustris
+parser.add_argument('-i', '--input', metavar='fastafile', dest='input', type=str, required=True)
+parser.add_argument('-o', '--output', metavar='output', dest='output', type=str, required=True)
+parser.add_argument('-g', '--gbif', help='gbif reference taxonomy', dest='gbif', type=str, required=True)
+args = parser.parse_args()
 
 def make_kingdom_dict():
     kingdomDict = {}
-    with open("gbif_taxonomy.tsv","r") as gbif:
+    with open(args.gbif,"r") as gbif:
         for x in gbif:
             x = x.split("\t")
             if x[1] not in kingdomDict:
@@ -21,9 +29,10 @@ def make_kingdom_dict():
 
 #>private_BOLD|NLFLM005-12|Potamogeton gramineus|Magnoliophyta|Liliopsida|Alismatales|Potamogetonaceae|Potamogeton|Potamogeton gramineus
 def add_taxonomy(kingdomDict):
-    with open("filtered_waterscan.fa", "r") as bold, open("filtered_waterscan_taxonomy.fa","a") as output:
+    with open(args.input, "r") as bold, open(args.output,"a") as output:
         for record in SeqIO.parse(bold, "fasta"):
-                description = str(record.description).split("|")
+                description = "private_BOLD|"+str(record.description)
+                description = description.split("|")
                 if description[3] in kingdomDict:
                     kingdom = kingdomDict[description[3]]
                 elif description[4] in kingdomDict:
@@ -35,7 +44,7 @@ def add_taxonomy(kingdomDict):
                 elif description[7] in kingdomDict:
                     kingdom = kingdomDict[description[7]]
                 else:
-                    print "no kingdom"
+                    print ("no kingdom")
                     kingdom = "unknown kingdom"
                 output.write(">"+description[0]+"|"+description[1]+"|"+description[2]+"|"+kingdom+"|"+description[3]+"|"+description[4]+"|"+description[5]+"|"+description[6]+"|"+description[7]+"|"+description[8]+"\n")
                 output.write(str(record.seq)+"\n")
