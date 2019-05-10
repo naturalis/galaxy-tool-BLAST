@@ -59,7 +59,9 @@
             <option value="/media/GalaxyData/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (15-04-2019)</option>
             <option value="/media/GalaxyData/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (15-04-2019)</option>
             <option value="/media/GalaxyData/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (15-04-2019)</option>
-            <option value="/media/GalaxyData/blast_databases/UNITE/UNITE_replaced_char.fa" label="unite">UNITE (19-04-2019)</option>       
+            <option value="/media/GalaxyData/blast_databases/UNITE/UNITE.fa" label="unite">UNITE (19-04-2019)</option>
+            <option value="/media/GalaxyData/blast_databases/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA 132 SSUParc</option>
+            <!-- <option value="/media/GalaxyData/blast_databases/SILVA2/SILVA_132_SSUParc_tax_silva_taxonomy.fasta" label="silvav5">SILVA 132 SSUParc v5</option> -->       
         </param>
         </macro>
         <macro name="user_input_fasta">
