@@ -1,7 +1,7 @@
 #!/bin/bash
 outlocation=$(mktemp -d /home/galaxy/galaxy/database/XXXXXX)
 SCRIPTDIR=$(dirname "$(readlink -f "$0")")
-echo $outlocation
+
 python $SCRIPTDIR"/blastn_wrapper.py" -it $1 -i $2 -db $3 -bt $4 -bm $5 -of $outlocation -outfmt $6 -cov "${10}" -id "${11}" -dbt "${13}"
 
 #below the code for moving the files to the galaxy output, when no taxonomy need to be added

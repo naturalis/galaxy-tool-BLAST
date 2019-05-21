@@ -24,6 +24,14 @@ parser.add_argument('-outfmt', '--outfmt', dest='outfmt', type=str, required=Fal
 args = parser.parse_args()
 
 def admin_log(out=None, error=None, function=""):
+    """
+    A log file will be made and log data will be written to that file. Most of the time this is the stdout and stderror
+    of the shell. In the log it says if the message is coming from stdout or stderror.
+    :param tempdir: the tempdir path that contains the log file
+    :param out: stdout or out message
+    :param error: stderror or error message
+    :param function: name of the function or step that generated the message
+    """
     with open(args.out_folder.strip() + "/log.log", 'a') as adminlogfile:
         seperation = 60 * "="
         if out:
@@ -41,6 +49,10 @@ def make_output_folders():
     call(["mkdir", args.out_folder.strip() + "/fasta"])
 
 def unpack_or_cp():
+    """
+    All the files in the /fasta folder will be blasted. If a user's input is a zip file the contents will be unzipped and moved to there.
+    If the user only blast one file it will also be moved to that folder
+    """
     if args.input_type == "zip":
         zip_out, zip_error = Popen(["unzip", args.input, "-d", args.out_folder.strip() + "/fasta"], stdout=PIPE,stderr=PIPE).communicate()
         admin_log(zip_out, zip_error)
@@ -49,6 +61,11 @@ def unpack_or_cp():
         admin_log(cp_out, cp_error)
 
 def check_if_fasta(file):
+    """
+    blastn can only blast fasta files. This method does a quick check if it is a rightly formatted fasta file.
+    :param file: file path
+    :return: boolean False if is not a fasta file, true if it is
+    """
     if os.path.splitext(file)[1] != ".zip":
         with open(file, "r") as handle:
             fasta = SeqIO.parse(handle, "fasta")
@@ -57,6 +74,9 @@ def check_if_fasta(file):
         return False
 
 def make_head_line():
+    """
+    The output is a tabular file with a header. This method writes that header to the a file.
+    """
     with open(args.out_folder.strip() + "/files/head_line.txt", "a") as headLine:
         headLine.write("#Query ID\t#Subject\t#Subject accession\t#Subject Taxonomy ID\t#Identity percentage\t#Coverage\t#evalue\t#bitscore\n")
 
