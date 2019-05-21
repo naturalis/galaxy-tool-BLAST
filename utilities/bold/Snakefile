@@ -96,7 +96,7 @@ rule create_database:
 		shell("sed '/Error/d' {input.bold_taxonomy} > output/bold_taxonomy_error_filtered")
 		#shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
 		shell("python add_taxonomy_bold.py -t output/bold_taxonomy_error_filtered -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
-		shell("makeblastdb -in {output.fasta} -dbtype nucl -blastdb_version 5")
+		shell("makeblastdb -in {output.fasta} -dbtype nucl -blastdb_version 4")
 
 rule create_filtered_database:
 	input:
@@ -113,4 +113,4 @@ rule create_filtered_database:
 		shell("sed -i 's/ /_/g' {output.fasta}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
 		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
-		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 5 >> {log.log_out} 2>> {log.log_error}")
+		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 4 >> {log.log_out} 2>> {log.log_error}")
