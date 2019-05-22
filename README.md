@@ -4,6 +4,9 @@ Wrapper for BLASTn, this repo can be used for the new (03-04-2019) galaxy 19.01 
 ## Getting Started
 ### Prerequisites
 **BLAST 2.8.1+**<br />
+NOTE: This is not the newest blast+ version, but somehow version 2.9.0 gives an error when creating a blast reference database.
+
+**BLAST 2.9.0+ (instructions if you want this version)**<br />
 ```
 cd /home/galaxy/Tools
 wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.9.0+-x64-linux.tar.gz
