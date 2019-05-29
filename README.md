@@ -15,6 +15,7 @@ chmod 777 ncbi-blast-2.8.1+/bin/*
 Add the blast programs to /usr/local/bin for convenience
 ```
 sudo ln -s /home/galaxy/Tools/ncbi-blast-2.8.1+/bin/makeblastdb /usr/local/bin/makeblastdb2.8.1
+sudo ln -s /home/galaxy/Tools/ncbi-blast-2.8.1+/bin/blastn /usr/local/bin/blastn
 ```
 **BLAST 2.9.0+ (instructions if you want this version)**<br />
 ```
