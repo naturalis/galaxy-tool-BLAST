@@ -5,8 +5,9 @@ configfile: "config.yml"
 
 rule all:
 	input:
-		"output/BOLD/bold_all_sequences_taxonomy.fa.nto",
-		"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nto"
+		"output/BOLD/bold_all_sequences_taxonomy.fa.nal",
+		"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nin"
+		#"output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nal"
 
 rule get_sequence_data:
 	output:
@@ -88,7 +89,7 @@ rule create_database:
 		bold_sequences = protected(rules.filter_and_check_sequences.output.fasta)
 	output:
 		fasta = protected("output/BOLD/bold_all_sequences_taxonomy.fa"),
-		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.nto"
+		blastdb = "output/BOLD/bold_all_sequences_taxonomy.fa.nal"
 	log:
 		log_error = "output/logs/log_error.txt",
 		log_out = "output/logs/log_stdout.txt"
@@ -96,7 +97,7 @@ rule create_database:
 		shell("sed '/Error/d' {input.bold_taxonomy} > output/bold_taxonomy_error_filtered")
 		#shell("python add_taxonomy_bold.py -t {input.bold_taxonomy} -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
 		shell("python add_taxonomy_bold.py -t output/bold_taxonomy_error_filtered -g {input.gbif_taxonomy} -b {input.bold_sequences} -o {output.fasta} >> {log.log_out} 2>> {log.log_error}")
-		shell("makeblastdb -in {output.fasta} -dbtype nucl -blastdb_version 4")
+		shell("makeblastdb2.8.1 -in {output.fasta} -dbtype nucl -blastdb_version 4")
 
 rule create_filtered_database:
 	input:
@@ -104,7 +105,7 @@ rule create_filtered_database:
 	output:
 		fasta = protected("output/BOLD/bold_all_sequences_taxonomy_species_only.fa"),
 		fasta_nodups = protected("output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa"),
-		blastdb = "output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nto"
+		blastdb = "output/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa.nin"
 	log:
 		log_error = "output/logs/log_error.txt",
 		log_out = "output/logs/log_stdout.txt"
@@ -113,4 +114,4 @@ rule create_filtered_database:
 		shell("sed -i 's/ /_/g' {output.fasta}")
 		shell("vsearch --derep_fulllength {output.fasta} --output {output.fasta_nodups}")
 		shell("sed -i 's/_/ /g' {output.fasta_nodups}")
-		shell("makeblastdb -in {output.fasta_nodups} -dbtype nucl -blastdb_version 4 >> {log.log_out} 2>> {log.log_error}")
+		shell("makeblastdb2.8.1 -in {output.fasta_nodups} -dbtype nucl -blastdb_version 4 >> {log.log_out} 2>> {log.log_error}")
