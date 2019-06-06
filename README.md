@@ -23,3 +23,4 @@ git clone https://github.com/naturalis/galaxy-tool-BLAST
 ```
 
 ## Usage
+To blast and get the final output with taxonomy takes two steps. First is the actual blasting, 
