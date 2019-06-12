@@ -29,4 +29,4 @@ rule make_database:
         db = "output/SILVA/SILVA_132_SSUParc_tax_silva_taxonomy.fasta.nal"
     run:
         shell("python add_taxonomy_silva.py -f {input.fasta} -t {input.taxonomy} -o {output.silva}")
-        shell("makeblastdb2.8.1-in {output.silva} -dbtype nucl -blastdb_version 4")
+        shell("makeblastdb2.8.1 -in {output.silva} -dbtype nucl -blastdb_version 4")
