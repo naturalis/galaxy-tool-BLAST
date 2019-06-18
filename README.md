@@ -34,9 +34,9 @@ blastn -query examplefasta/10seqs_example.fa -db nt -task megablast -num_threads
 python headerandcoverage_lite.py -i example_output -cov 80
 ```
 **Add taxonomy:**<br />
-In this example we blasted against Genbank. To add taxonomy from this source we need the files rankedlineage.dmp and merged.dmp. The files can be downloaded from this page ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip. Make sure that the genbank sequence database is the same version as the taxonomy files.
+In this example we blasted against Genbank. To add taxonomy from this source we need the files rankedlineage.dmp and merged.dmp. The files can be downloaded from this page ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip. Make sure that the genbank sequence database is the same version as the taxonomy files. To add the genbank taxonomy execute the following command:
 ```
-
+python blastn_add_taxonomy_lite.py -i lite_version/example_output_covfiltered.tabular -t lite_version/rankedlineage.dmp -m lite_version/merged.dmp -o taxonomy_example_output_covfiltered.tabular
 ```
 
 
