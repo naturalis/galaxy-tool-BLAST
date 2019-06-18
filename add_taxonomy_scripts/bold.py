@@ -1,10 +1,6 @@
 import sqlite3
 
 class Bold:
-    def __init__(self, database, gbif):
-        self.db = database
-        self.gbif_db = gbif
-
     def find_bold_taxonomy(self, line, source):
         species = line.split("\t")[1].split("|")[2]
         genus = line.split("\t")[1].split("|")[8]

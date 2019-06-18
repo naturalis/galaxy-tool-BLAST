@@ -1,0 +1,91 @@
+#Query ID	#Subject	#Subject accession	#Subject Taxonomy ID	#Identity percentage	#Coverage	#evalue	#bitscore
+Otu1	Asellus aquaticus isolate WR2 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144832	92525	99.355	100	2.74e-156	562
+Otu1	Asellus aquaticus isolate WR1 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144831	92525	99.355	100	2.74e-156	562
+Otu1	Asellus aquaticus isolate DRccR cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144889	92525	99.032	100	1.28e-154	556
+Otu1	Asellus aquaticus isolate OSP1 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144771	92525	99.032	100	1.28e-154	556
+Otu1	Asellus aquaticus isolate OSP4 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144770	92525	99.032	100	1.28e-154	556
+Otu1	Asellus aquaticus isolate DR14 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144766	92525	99.032	100	1.28e-154	556
+Otu1	Asellus aquaticus isolate OSP2 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144769	92525	98.710	100	5.94e-153	551
+Otu1	Asellus aquaticus isolate DR5 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144768	92525	98.710	100	5.94e-153	551
+Otu1	Asellus aquaticus isolate DR13 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144761	92525	98.710	100	5.94e-153	551
+Otu1	Asellus aquaticus isolate VA13 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ144849	92525	98.387	100	2.76e-151	545
+Otu2	Ischnura saharensis isolate 7003 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MH450003	1273139	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans isolate 6694 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MH449993	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans isolate 6727 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MH449982	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans isolate T_P60 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MF458738	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans mitochondrion, complete genome	KU958378	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans voucher RMNH.INS.228277 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KF369415	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans voucher BC ZSM AQU 00399 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HQ563104	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans voucher BC ZSM AQU 00172 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HM376192	197161	100.000	100	1.27e-159	573
+Otu2	Ischnura elegans isolate ADR5 cytochrome c oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KX399383	197161	100.000	99	4.56e-159	571
+Otu2	Ischnura elegans isolate 9 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	KY127440	197161	99.032	100	1.28e-154	556
+Otu3	Gammarus tigrinus voucher USNM:IZ:1286919 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU905737	360729	100.000	100	1.27e-159	573
+Otu3	Gammarus tigrinus voucher FC-TIG85 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GQ341860	360729	100.000	100	1.27e-159	573
+Otu3	Gammarus tigrinus voucher FC-TIG88 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GQ341858	360729	100.000	100	1.27e-159	573
+Otu3	Gammarus tigrinus voucher 609 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	EF570348	360729	100.000	100	1.27e-159	573
+Otu3	Gammarus tigrinus isolate Gt_H03 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	KT075218	360729	99.677	100	5.90e-158	568
+Otu3	Gammarus tigrinus voucher FC-TIG84 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GQ341859	360729	99.677	100	5.90e-158	568
+Otu3	Gammarus tigrinus voucher USNM:IZ:1463522 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MH235818	360729	99.355	100	2.74e-156	562
+Otu3	Gammarus tigrinus voucher USNM:IZ:1286921 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU905952	360729	99.355	100	2.74e-156	562
+Otu3	Gammarus tigrinus voucher USNM:IZ:1286920 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU905742	360729	99.355	100	2.74e-156	562
+Otu3	Gammarus tigrinus isolate Gt_H04 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	KT075217	360729	99.661	95	1.29e-149	540
+Otu4	Gyrinus marinus voucher ZFMK-TIS-7934 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU913593	1323538	99.677	100	5.90e-158	568
+Otu4	Gyrinus marinus voucher ZFMK-TIS-2517757 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU913511	1323538	99.677	100	5.90e-158	568
+Otu4	Gyrinus marinus voucher ZMUO<FIN>:004346 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KJ964209	1323538	99.355	100	2.74e-156	562
+Otu4	Gyrinus wallisi voucher JBWM0338525 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HM385948	1267239	95.484	100	2.82e-136	496
+Otu4	Gyrinus wallisi voucher JBWM0338526 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KJ203848	1267239	95.161	100	1.31e-134	490
+Otu4	Gyrinus wallisi voucher 08BBCOL-0556 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KM849528	1267239	94.839	100	6.11e-133	484
+Otu4	Gyrinus wallisi voucher JBWM0338524 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KJ203084	1267239	94.839	100	6.11e-133	484
+Otu4	Gyrinus aeratus voucher BIOUG01005-B09 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KC016790	1267236	94.822	99	2.20e-132	483
+Otu4	Gyrinus aeratus voucher BIOUG01002-F09 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KC016789	1267236	94.822	99	2.20e-132	483
+Otu4	Gyrinus aeratus voucher BIOUG<CAN>:10PROBE-27101 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HQ963007	1267236	94.822	99	2.20e-132	483
+Otu5	Limnomysis benedeni voucher BIOUG<CAN>:MaMys004 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	DQ889159	236570	100.000	100	1.27e-159	573
+Otu5	Limnomysis benedeni haplotype 9 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529025	236570	100.000	98	2.74e-156	562
+Otu5	Limnomysis benedeni haplotype 6 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529022	236570	100.000	98	2.74e-156	562
+Otu5	Limnomysis benedeni haplotype 3 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529019	236570	99.671	98	1.28e-154	556
+Otu5	Limnomysis benedeni haplotype 8 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529024	236570	99.342	98	5.94e-153	551
+Otu5	Limnomysis benedeni haplotype 5 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529021	236570	97.039	98	2.80e-141	512
+Otu5	Limnomysis benedeni haplotype 2 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529018	236570	96.711	98	1.30e-139	507
+Otu5	Limnomysis benedeni haplotype 1 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529017	236570	96.711	98	1.30e-139	507
+Otu5	Limnomysis benedeni isolate 684LimAkh cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	DQ779809	236570	97.619	95	4.69e-139	505
+Otu5	Limnomysis benedeni haplotype 7 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	AY529023	236570	96.382	98	1.69e-138	503
+Otu6	Caenis horaria voucher GBOL03390 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KY262338	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BCZSM_EPH_0105 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KY262320	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BCZSM_EPH_0128 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KY261729	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BCZSM_EPH_0121 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KY261254	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BC ZSM AQU 00792 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HQ563204	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BC ZSM AQU 00112 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GU682187	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher BC ZSM AQU 00081 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GU682182	1279096	100.000	100	1.27e-159	573
+Otu6	Caenis horaria voucher NO-EPH107 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KC158559	1279096	99.677	100	5.90e-158	568
+Otu6	Caenis horaria voucher GBOL03387 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KY262355	1279096	100.000	82	6.15e-128	468
+Otu6	Zephlebia inconspicua voucher NZMAY101 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KX037993	1969011	82.143	99	3.12e-66	263
+Otu8	Cataclysta lemnata voucher RMNH.INS.539052 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KX049397	1594245	100.000	100	1.27e-159	573
+Otu8	Cataclysta lemnata voucher TLMF Lep 04461 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	JN261402	1594245	100.000	100	1.27e-159	573
+Otu8	Cataclysta lemnata voucher BC ZSM Lep 22933 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GU686707	1594245	100.000	100	1.27e-159	573
+Otu8	Cataclysta lemnata voucher BC ZSM Lep 25498 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GU706882	1594245	100.000	100	1.27e-159	573
+Otu8	Cataclysta lemnata voucher BC ZSM Lep 23222 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	GU706351	1594245	99.677	100	1.64e-158	569
+Otu8	Cataclysta lemnata voucher TLMF Lep 08208 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KM572687	1594245	99.677	100	5.90e-158	568
+Otu8	Cataclysta lemnata voucher BC ZSM Lep 25365 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HM391769	1594245	100.000	90	2.17e-142	516
+Otu8	Lepidoptera sp. BOLD:AAN6803 voucher BIOUG<CAN>:BC-INCT0081 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HQ961177	962720	90.645	100	2.92e-111	412
+Otu8	Lichenaula sp. ANIC14 voucher CCDB-15745-E07 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KF395772	1374732	90.323	100	1.36e-109	407
+Otu8	Chetone angulosa cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	JQ565024	714760	90.323	100	1.36e-109	407
+Otu9	Erpobdella octoculata cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	AF003274	39305	99.029	99	4.59e-154	555
+Otu9	Erpobdella octoculata voucher UGSB4194 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	HM246599	39305	93.069	98	1.04e-120	444
+Otu9	Erpobdella octoculata voucher UGSB4193 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	HM246555	39305	93.190	90	1.05e-110	411
+Otu9	Erpobdella octoculata cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	HQ336344	39305	92.193	87	8.25e-102	381
+Otu9	Erpobdella japonica mitochondrion, complete genome	MF358688	184739	88.673	99	1.07e-100	377
+Otu9	Erpobdella sp. IAK-2015a voucher G13 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	KM095091	1592243	88.673	99	1.07e-100	377
+Otu9	Erpobdella sp. IAK-2015a voucher Z24 cytochrome c oxidase subunit I (COI) gene, partial cds; mitochondrial	KM095092	1592243	88.636	99	3.84e-100	375
+Otu9	Erpobdella japonica cytochrome c oxidase subunit I gene, partial cds; mitochondrial	AF116026	184739	88.350	99	4.96e-99	372
+Otu9	Erpobdellidae sp. HLC-26625 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MG421581	2470132	88.103	99	2.31e-97	366
+Otu9	Erpobdellidae sp. HLC-26642 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	MG421552	2470131	88.103	99	2.31e-97	366
+Otu10	Orthetrum albistylum mitochondrial RF2436 COI gene for cytochrome oxidase subunit 1, partial cds	LC366771	254766	100.000	98	2.74e-156	562
+Otu10	Odonata sp. BOLD:AAK5996 voucher BC ZSM AQU 00410 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	HM901872	126256	100.000	98	2.74e-156	562
+Otu10	Orthetrum glaucum voucher RMNH.INS.501025 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU496893	1168657	94.498	99	1.02e-130	477
+Otu10	Orthetrum glaucum voucher RMNH.INS.500541 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU496892	1168657	94.498	99	1.02e-130	477
+Otu10	Orthetrum glaucum isolate OA-72 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	MG885253	1168657	94.444	99	4.76e-129	472
+Otu10	Orthetrum glaucum isolate OA-55 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	MG885252	1168657	94.444	99	4.76e-129	472
+Otu10	Orthetrum glaucum isolate D6 mitochondrion, complete genome	KU361232	1168657	94.175	99	4.76e-129	472
+Otu10	Orthetrum glaucum voucher RMNH.INS.5008323 cytochrome oxidase subunit 1 (COI) gene, partial cds; mitochondrial	KU496891	1168657	94.175	99	4.76e-129	472
+Otu10	Orthetrum glaucum isolate 140312 cytochrome oxidase subunit I (COI) gene, partial cds; mitochondrial	KT961630	1168657	94.175	99	4.76e-129	472
+Otu10	Orthetrum glaucum voucher MZDF13 cytochrome oxidase subunit 1 gene, partial cds; mitochondrial	KC122232	1168657	94.175	99	4.76e-129	472
