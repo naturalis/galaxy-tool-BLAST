@@ -1,4 +1,4 @@
-<tool id="blastnv2" name="blastnv2">
+<tool id="blastn" name="Identify reads with blastn and find taxonomy">
     <!-- description>blastn wrapper and taxonomy finder</description-->
     <requirements>
         <requirement type="package" version="2.7">python</requirement>
@@ -48,7 +48,7 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/media/Galaxydata/blastV2/databases/18S.fa" label="18s">18S</option>
+            <option value="/media/GalaxyData/blast_databases/18S/18S.fa" label="18s">18S</option>
         </param>
         </macro>
         <macro name="user_input_fasta">
