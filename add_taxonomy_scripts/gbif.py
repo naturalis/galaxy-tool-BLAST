@@ -12,7 +12,7 @@ class Gbif:
         family = line.split("\t")[-1].split(" / ")[-3]
         hit = None
         if "unknown" not in species and int(species.count(" ")) >= 1:
-            self.cursor.execute("SELECT * FROM gbif WHERE species=? LIMIT 1", [species.split(" ")[0] + " " + species.split(" ")[1].strip()])
+            self.cursor.execute("SELECT * FROM gbif WHERE species_rank=? AND taxonomicStatus=? LIMIT 1", [species.split(" ")[0] + " " + species.split(" ")[1].strip(), "accepted"])
             hit = self.cursor.fetchone()
             if hit is not None and hit[4] == "synonym" and hit[4] == "homotypic synonym":
                 self.cursor.execute("SELECT * FROM gbif WHERE taxonID=? LIMIT 1", [hit[3]])
@@ -24,7 +24,7 @@ class Gbif:
                 return "\t".join(line)
 
         if "unknown" not in genus and hit is None:
-            self.cursor.execute("SELECT species, genus, family, order1, class, phylum, kingdom FROM gbif WHERE genus=? LIMIT 1", [genus.strip()])
+            self.cursor.execute("SELECT species_rank, genus_rank, family_rank, order_rank, class_rank, phylum_rank, kingdom_rank FROM gbif WHERE genus_rank=? AND taxonomicStatus=? LIMIT 1", [genus.strip(), "accepted"])
             hit = self.cursor.fetchone()
             if hit is not None:
                 line = line.split("\t")
@@ -36,7 +36,7 @@ class Gbif:
                 return "\t".join(line)
 
         if "unknown" not in family and hit is None:
-            self.cursor.execute("SELECT species, genus, family, order1, class, phylum, kingdom FROM gbif WHERE family=? LIMIT 1", [family.strip()])
+            self.cursor.execute("SELECT species_rank, genus_rank, family_rank, order_rank, class_rank, phylum_rank, kingdom_rank FROM gbif WHERE family_rank=? AND taxonomicStatus=? LIMIT 1", [family.strip(), "accepted"])
             hit = self.cursor.fetchone()
             if hit is not None:
                 line = line.split("\t")

@@ -19,8 +19,7 @@ parser.add_argument('-t', '--taxonomy_reference', metavar='taxonomy reference', 
 parser.add_argument('-m', '--merged', metavar='merged taxonids', dest='merged', type=str, help='merged taxon id json', required=False, nargs='?', default="merged_taxonomy.json")
 parser.add_argument('-ts', '--taxonomy_source', dest='taxonomy_source', type=str, required=False, nargs='?', default="default")
 parser.add_argument('-o', '--output', metavar='output', dest='output', type=str, help='output file, BLAST hits with taxonomy', required=False, nargs='?', default="")
-parser.add_argument('-taxonomy_db', dest='taxonomy_db', type=str, help='sqlite db', required=True)
-parser.add_argument('-bold_db', dest='bold_db', type=str, help='sqlite db with bold taxonomy', required=True)
+parser.add_argument('-taxonomy_db', dest='taxonomy_db', type=str, required=False)
 args = parser.parse_args()
 
 def add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva):
@@ -52,7 +51,7 @@ def add_taxonomy(file, genbank, bold, gbif, privatebold, unite, silva):
 
 def process_files():
     genbank = Genbank(args.rankedlineage, args.merged)
-    bold = Bold(args.bold_db, args.taxonomy_db)
+    bold = Bold()
     privatebold = PrivateBold()
     unite = Unite()
     silva = Silva()
