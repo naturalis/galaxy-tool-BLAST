@@ -35,9 +35,11 @@ def admin_log(out=None, error=None, function=""):
     with open(args.out_folder.strip() + "/log.log", 'a') as adminlogfile:
         seperation = 60 * "="
         if out:
-            adminlogfile.write(function + " \n" + seperation + "\n" + out + "\n\n")
+#            adminlogfile.write(function + " \n" + seperation + "\n" + out + "\n\n")
+            adminlogfile.write(str(function) + " \n" + str(seperation) + "\n" + str(out) + "\n\n")
         if error:
-            adminlogfile.write(function + "\n" + seperation + "\n" + error + "\n\n")
+#            adminlogfile.write(function + "\n" + seperation + "\n" + error + "\n\n")
+            adminlogfile.write(str(function) + "\n" + str(seperation) + "\n" + error.decode() + "\n\n")
 
 def make_output_folders():
     """
@@ -84,7 +86,7 @@ def extension_check_and_rename():
     files = [os.path.basename(x) for x in sorted(glob.glob(args.out_folder.strip() + "/fasta/*"))]
     for x in files:
         if check_if_fasta(args.out_folder.strip() + "/fasta/" + x):
-            fastafile = os.path.splitext(x)[0].translate((string.maketrans("-. ", "___"))) + ".fa"
+            fastafile = os.path.splitext(x)[0].translate((str.maketrans("-. ", "___"))) + ".fa"
             if x != fastafile:
                 call((["mv", args.out_folder.strip() + "/fasta/" + x, args.out_folder.strip() + "/fasta/" + fastafile]))
         else:

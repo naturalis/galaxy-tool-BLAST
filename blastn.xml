@@ -1,8 +1,8 @@
 <tool id="blastn" name="Identify reads with blastn and find taxonomy">
     <!-- description>blastn wrapper and taxonomy finder</description-->
     <requirements>
-        <requirement type="package" version="2.7">python</requirement>
-        <requirement type="package">biopython</requirement>
+        <requirement type="package" version="3.8.2">python</requirement>
+        <requirement type="package" version="1.76">biopython</requirement>
     </requirements>
     <command>
         <![CDATA[
@@ -48,7 +48,16 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/media/GalaxyData/blast_databases/18S/18S.fa" label="18s">18S</option>
+			<option value="/extend/blast_databases/genbank/nt" label="genbankfull">Genbank (2020-03-03)</option>
+            <option value="/extend/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2020-03-03)</option>
+			<option value="/extend/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (2020-03-03)</option>
+            <option value="/extend/blast_databases/16S/16S.fa" label="genbank16S">Genbank 16S (2020-03-03)</option>
+            <option value="/extend/blast_databases/18S/18S.fa" label="genbank18S">Genbank 18S (2020-03-03)</option>
+            <option value="/extend/blast_databases/ITS/ITS.fa" label="genbankits">Genbank ITS (2020-03-03)</option>
+            <option value="/extend/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (2020-03-03)</option>
+            <option value="/extend/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (2020-03-03)</option>
+            <option value="/extend/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (2020-03-03)</option>
+            <option value="/extend/blast_databases/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (2020-03-03)</option>
         </param>
         </macro>
         <macro name="user_input_fasta">
