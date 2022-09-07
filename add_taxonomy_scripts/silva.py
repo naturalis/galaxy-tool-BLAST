@@ -10,7 +10,7 @@ class Silva:
         for x in unknowns[len(ranks):]:
             ranks.append(x)
         ranks.append(species)
-        print ranks
+        print(ranks)
         species = ranks[6]
         genus = ranks[5]
         family = ranks[4]

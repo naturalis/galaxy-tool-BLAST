@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 blastn_add_taxonomy   V1.0    martenhoogeveen@naturalis.nl
 This script adds the taxonomy to the BLAST output. The input is de folder path that contains the blast results.
@@ -30,7 +30,7 @@ def add_taxonomy(genbank, bold, privatebold, unite, silva):
                     line_taxonomy = bold.find_bold_taxonomy(line, "bold")
                 elif line.split("\t")[1].split("|")[0] == "klasse":
                     line_taxonomy = bold.find_bold_taxonomy(line, "klasse")
-                elif line.split("\t")[1].split("|")[0] == "private_BOLD":
+                elif line.split("\t")[1].split("|")[0] == "private_BOLD" or line.split("\t")[1].split("|")[0] == "custom":
                     line_taxonomy = privatebold.find_private_bold_taxonomy(line)
                 elif line.split("\t")[1].split("|")[0] == "UNITE":
                     line_taxonomy = unite.find_unite_taxonomy(line)

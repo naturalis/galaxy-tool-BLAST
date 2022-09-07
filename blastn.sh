@@ -1,4 +1,7 @@
 #!/bin/bash
+echo $CONDA_DEFAULT_ENV
+python --version
+
 outlocation=$(mktemp -d /media/GalaxyData/database/files/XXXXXX)
 SCRIPTDIR=$(dirname "$(readlink -f "$0")")
 

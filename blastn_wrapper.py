@@ -118,6 +118,8 @@ def create_blast_command(query, output_name):
         base_command = base_command + ["-max_target_seqs", args.max_target_seqs.strip()]
     if args.outfmt.strip() in ["0", "8", "11"]:
         base_command = base_command + ["-num_alignments", args.max_target_seqs.strip()]
+    print("base_command:")
+    print(base_command)
     return base_command
 
 def coverage_filter(blastfile):

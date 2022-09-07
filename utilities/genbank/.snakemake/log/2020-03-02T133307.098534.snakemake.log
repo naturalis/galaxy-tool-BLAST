@@ -1,0 +1,6 @@
+The flag 'protected' used in rule all is only valid for outputs, not inputs.
+The flag 'protected' used in rule all is only valid for outputs, not inputs.
+The flag 'protected' used in rule all is only valid for outputs, not inputs.
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce –rulegraph (if you use input functions make sure that they don't raise unexpected exceptions).

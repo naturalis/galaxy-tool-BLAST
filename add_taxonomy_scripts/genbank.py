@@ -19,14 +19,19 @@ class Genbank:
                 kingdom = tax[8].strip() if tax[8].strip() else "unknown kingdom"
                 superkingdom = tax[9].strip() if tax[9].strip() else "unknown superkingdom"
                 taxonomyDict[str(tax[0].strip())] = {"species":species, "genus":genus, "family":family, "order":order, "class":classe, "phylum":phylum, "kingdom":kingdom,"superkingdom":superkingdom}
+        # print("taxonomyDict")
+        # print(taxonomyDict)
         return taxonomyDict
 
     def merged_taxonomy(self, merged):
         mergedDict = {}
         with open(merged) as merged:
             for taxid in merged:
-                a = map(str.strip, taxid.split("|"))
+                # print(taxid)
+                a = list(map(str.strip, taxid.split("|")))
                 mergedDict[a[0]]=a[1]
+        # print("mergedDict")
+        # print(mergedDict)
         return mergedDict
 
     def check_merged_taxonomy(self, taxid, mergedTaxonDict):
@@ -40,10 +45,14 @@ class Genbank:
         kingdom = "unknown kingdom"
         superkingdom = "unknown kingdom"
         taxid = hit.split("\t")[3]
+        # print("hit")
+        # print(hit)
+        taxonomydb = self.taxonomyDict
         if taxid == "N/A":
             return hit.strip() + "\tGenbank\t" + "unknown kingdom / unknown phylum / unknown class / unknown order / unknown family / unknown genus / unknown species\n"
+        elif taxid not in taxonomydb:
+            return hit.strip() + "\tGenbank\t" + "invalid taxid / invalid taxid / invalid taxid / invalid taxid / invalid taxid / invalid taxid / invalid taxid\n"
         else:
-            taxonomydb = self.taxonomyDict
             try:
                 kingdom = taxonomydb[taxid]["kingdom"]
                 superkingdom = taxonomydb[taxid]["superkingdom"]

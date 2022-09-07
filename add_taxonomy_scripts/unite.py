@@ -2,7 +2,7 @@ class Unite:
 
     def find_unite_taxonomy(self, line):
         taxonomyList = line.split("\t")[1].split("|")[2].split(";")
-        print taxonomyList
+        print(taxonomyList)
         species = taxonomyList[-1] if taxonomyList[-1] else "unknown species"
         species = species.replace("_", " ")
         genus = taxonomyList[-2] if taxonomyList[-2] else "unknown genus"
@@ -14,7 +14,7 @@ class Unite:
         taxonomy = [kingdom[3:], phylum[3:], classe[3:], order[3:], family[3:], genus[3:], species[3:]]
 
         newLine = line.strip().split("\t")
-        print newLine[1]
+        print(newLine[1])
         if len(line.split("\t")[1].split("|")) == 4:
             newLine[1] = newLine[1].split("|")[1]+"|"+line.split("\t")[1].split("|")[3]
         else:
