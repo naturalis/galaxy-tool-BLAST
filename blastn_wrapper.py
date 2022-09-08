@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 blastn_wrapper   V1.0    martenhoogeveen@naturalis.nl
