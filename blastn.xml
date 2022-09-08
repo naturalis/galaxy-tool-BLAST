@@ -48,23 +48,23 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/extend/blast_databases/genbank/nt" label="genbankfull">Genbank (2022-03-15)</option>
-            <option value="/extend/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-15)</option>
-            <option value="/extend/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (2022-03-15)</option>
-            <option value="/extend/blast_databases/16S/16S.fa" label="genbank16S">Genbank 16S (2022-03-15)</option>
-            <option value="/extend/blast_databases/18S/18S.fa" label="genbank18S">Genbank 18S (2022-03-15)</option>
-            <option value="/extend/blast_databases/ITS/ITS.fa" label="genbankits">Genbank ITS (2022-03-15)</option>
-            <!-- <option value="/extend/blast_databases/BOLD_202201/bold_all_sequences_taxonomy.fa" label="bold">BOLD (01-2022)</option>
-            <option value="/extend/blast_databases/BOLD_202201/bold_all_sequences_taxonomy_species_only_nodups.fa" label="bold_no_dup">BOLD no duplicates (01-2022)</option> -->
-            <option value="/extend/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (2022-03-15)</option>
-            <option value="/extend/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (2022-03-15)</option>
-            <option value="/extend/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (2022-03-15)</option>
-            <option value="/extend/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (2022-03-15)</option>
-            <!-- <option value="/extend/blast_databases/UNITE_202201/UNITE.fa" label="unite">UNITE 8.3 (01-2022)</option> -->
-            <option value="/extend/blast_databases/SILVA/SILVA_138_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA 138 SSUParc</option>
-            <!-- <option value="/extend/blast_databases/waterscan/waterscan.fa" label="waterscan">waterscan</option> -->
-            <!-- <option value="/extend/blast_databases/waterscan/filtered_waterscan.fa" label="waterscan_filter">waterscan filtered</option> -->
-            <!-- <option value="/extend/blast_databases/waterscan/klassev2.fa" label="klasse">Klasse</option> -->
+            <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy.fa" label="bold">BOLD</option>
+            <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa" label="boldnodups">BOLD species only no duplicates</option>
+            <option value="/extend/blast_databases/genbank/nt" label="genbankfull">Genbank (2022-03-16)</option>
+            <option value="/extend/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-16)</option>
+            <option value="/extend/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (2022-03-16)</option>
+            <option value="/extend/blast_databases/16S/16S.fa" label="genbank16S">Genbank 16S (2022-03-16)</option>
+            <option value="/extend/blast_databases/18S/18S.fa" label="genbank18S">Genbank 18S (2022-03-16)</option>
+            <option value="/extend/blast_databases/ITS/ITS.fa" label="genbankits">Genbank ITS (2022-03-16)</option>
+            <option value="/extend/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (2022-03-16)</option>
+            <option value="/extend/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (2022-03-16)</option>
+            <option value="/extend/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (2022-03-16)</option>
+            <option value="/extend/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (2022-03-16)</option>
+            <option value="/extend/blast_databases/UNITE/UNITE.fa" label="unite">UNITE</option>
+            <option value="/extend/blast_databases/SILVA/SILVA_138_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA 138.1 SSUParc</option>
+            <option value="/extend/blast_databases/waterscan/waterscan.fa" label="waterscan">waterscan</option>
+            <option value="/extend/blast_databases/waterscan/filtered_waterscan.fa" label="waterscan_filter">waterscan filtered</option>
+            <option value="/extend/blast_databases/waterscan/klassev2.fa" label="klasse">Klasse</option>
         </param>
         </macro>
         <macro name="user_input_fasta">
