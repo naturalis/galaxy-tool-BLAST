@@ -3,6 +3,7 @@
     <requirements>
         <requirement type="package" version="3.8.2">python</requirement>
         <requirement type="package" version="1.76">biopython</requirement>
+        <requirement type="package" version="2.13.0">blast</requirement>
     </requirements>
     <command>
         <![CDATA[
@@ -48,8 +49,8 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy.fa" label="bold">BOLD</option>
-            <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa" label="boldnodups">BOLD species only no duplicates</option>
+            <option value="/data/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-16)</option>
+            <!-- <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa" label="boldnodups">BOLD species only no duplicates</option>
             <option value="/extend/blast_databases/genbank/nt" label="genbankfull">Genbank (2022-03-16)</option>
             <option value="/extend/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-16)</option>
             <option value="/extend/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (2022-03-16)</option>
@@ -64,7 +65,7 @@
             <option value="/extend/blast_databases/SILVA/SILVA_138_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA 138.1 SSUParc</option>
             <option value="/extend/blast_databases/waterscan/waterscan.fa" label="waterscan">waterscan</option>
             <option value="/extend/blast_databases/waterscan/filtered_waterscan.fa" label="waterscan_filter">waterscan filtered</option>
-            <option value="/extend/blast_databases/waterscan/klassev2.fa" label="klasse">Klasse</option>
+            <option value="/extend/blast_databases/waterscan/klassev2.fa" label="klasse">Klasse</option> -->
         </param>
         </macro>
         <macro name="user_input_fasta">
