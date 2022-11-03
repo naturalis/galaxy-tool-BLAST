@@ -22,4 +22,4 @@ Depending on your setup the [ansible.builtin.git](https://docs.ansible.com/ansib
 &ensp;&ensp;`version: master`  
 
 ## Create Blast databases  
-See the wiki for some extra info about the reference databases https://github.com/naturalis/galaxy-tool-BLAST/wiki.  
+See the [wiki](https://github.com/naturalis/galaxy-tool-BLAST/wiki) for creation of reference databases.  
