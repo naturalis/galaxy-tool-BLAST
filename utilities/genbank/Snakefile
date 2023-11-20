@@ -28,13 +28,13 @@ rule all:
 		"output/ITS/ITS.fa.nhr",
 		"output/12S/12S.fa.nhr",
 		"output/18S/18S.fa.nhr",
-		"output/16S/16S.fa.01.nhr",
-		"output/matK/matK.fa.01.nhr",
+		"output/16S/16S.fa.00.nhr",
+		"output/matK/matK.fa.00.nhr",
 		"output/rbcL/rbcL.fa.nhr",
 		"output/trnl/trnl.fa.nhr",
 		#"output/NT/taxidlineage.dmp",
 		"output/bacterial_genome_selection/bacterial_genome_selection.fa",
-		"output/bacterial_genome_selection/bacterial_genome_selection.fa.01.nhr",
+		"output/bacterial_genome_selection/bacterial_genome_selection.fa.00.nhr",
 		"output/taxonomy/rankedlineage.dmp",
 		"output/taxonomy/merged.dmp"
 
@@ -56,7 +56,7 @@ rule create_CO1:
 	output:
 		CO1 = "output/CO1/CO1.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.CO1,'a') as newco1file:
+		with open(input.nt) as handle, open(output.CO1,'a') as newco1file:
         for record in SeqIO.parse(handle, "fasta"):
             if "co1" in str(record.description.lower()) or "coi" in str(record.description.lower()) or "cox" in str(record.description.lower()) or "cytochrome c oxidase" in str(record.description.lower()) or "cytochrome oxidase" in str(record.description.lower()):
                 newco1file.write(">"+str(record.description)+"\n")
@@ -68,7 +68,7 @@ rule create_ITS:
 	output:
 		ITS = "output/ITS/ITS.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.ITS,'a') as newitsfile:
+		with open(input.nt) as handle, open(output.ITS,'a') as newitsfile:
         for record in SeqIO.parse(handle, "fasta"):
             if "internal transcribed spacer" in str(record.description).lower() or "its" in str(record.description).lower() or "5.8" in str(record.description).lower():
                 newitsfile.write(">"+str(record.description)+"\n")
@@ -80,7 +80,7 @@ rule create_12S:
 	output:
 		fa12S = "output/12S/12S.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.fa12S,'a') as new12sfile:
+		with open(input.nt) as handle, open(output.fa12S,'a') as new12sfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				if "12s" in str(record.description).lower() or "mitochondrial" in str(record.description).lower():
 					new12sfile.write(">"+str(record.description)+"\n")
@@ -92,7 +92,7 @@ rule create_18S:
 	output:
 		fa18S = "output/18S/18S.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.fa18S,'a') as new18sfile:
+		with open(input.nt) as handle, open(output.fa18S,'a') as new18sfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				if "18s" in str(record.description).lower() or "small subunit" in str(record.description).lower():
 					new18sfile.write(">"+str(record.description)+"\n")
@@ -104,7 +104,7 @@ rule create_16S:
 	output:
 		fa16S = "output/16S/16S.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.fa16S,'a') as new16sfile:
+		with open(input.nt) as handle, open(output.fa16S,'a') as new16sfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				if "16s" in str(record.description).lower() or "mitochondrial" in str(record.description).lower() or "mitochondrion" in str(record.description).lower():
 					new16sfile.write(">"+str(record.description)+"\n")
@@ -116,7 +116,7 @@ rule create_matK:
 	output:
 		matk = "output/matK/matK.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.matk, 'a') as newfile:
+		with open(input.nt) as handle, open(output.matk, 'a') as newfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				des = str(record.description.lower())
 				if ("chloroplast" in des or "matk" in des or "maturase" in des or "bac" in des):
@@ -129,7 +129,7 @@ rule create_rbcL:
 	output:
 		rbcl = "output/rbcL/rbcL.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.rbcl, 'a') as newfile:
+		with open(input.nt) as handle, open(output.rbcl, 'a') as newfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				des = str(record.description.lower())
 				if ("ribulose-1,5-bisphosphate carboxylase/oxygenase" in des or "rbcl" in des or "chloroplast" in des or "plastid" in des):
@@ -142,7 +142,7 @@ rule create_trnl:
 	output:
 		trnl = "output/trnl/trnl.fa"
 	run:
-		with open(input.nt, "rU") as handle, open(output.trnl, 'a') as newfile:
+		with open(input.nt) as handle, open(output.trnl, 'a') as newfile:
 			for record in SeqIO.parse(handle, "fasta"):
 				des = str(record.description.lower())
 				if ("trnl" in des or "chloroplast" in des or "plastid" in des or "tRNA-Leu" in des or "trnF" in des or "trnT" in des):
@@ -238,7 +238,7 @@ rule make_blast_database_CO1:
 	output:
 		db = "output/CO1/CO1.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5 -max_file_sz 2000000000")
 
 rule make_blast_database_ITS:
 	input:
@@ -247,7 +247,7 @@ rule make_blast_database_ITS:
 	output:
 		db = "output/ITS/ITS.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_12S:
 	input:
@@ -256,7 +256,7 @@ rule make_blast_database_12S:
 	output:
 		db = "output/12S/12S.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_18S:
 	input:
@@ -265,7 +265,7 @@ rule make_blast_database_18S:
 	output:
 		db = "output/18S/18S.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_16S:
 	input:
@@ -276,9 +276,9 @@ rule make_blast_database_16S:
 		fasta = rules.create_16S.output.fa16S,
 		mapping = rules.create_mapping_file_16S.output.s16Smap
 	output:
-		db = "output/16S/16S.fa.01.nhr"
+		db = "output/16S/16S.fa.00.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_matK:
 	input:
@@ -286,9 +286,9 @@ rule make_blast_database_matK:
 		fasta = rules.create_matK.output.matk,
 		mapping = rules.create_mapping_file_matK.output.matKmap
 	output:
-		db = "output/matK/matK.fa.01.nhr"
+		db = "output/matK/matK.fa.00.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_rbcL:
 	input:
@@ -299,7 +299,7 @@ rule make_blast_database_rbcL:
 	output:
 		"output/rbcL/rbcL.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule make_blast_database_trnl:
 	input:
@@ -310,7 +310,7 @@ rule make_blast_database_trnl:
 	output:
 		"output/trnl/trnl.fa.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule bacterial_genome:
 	input:
@@ -333,9 +333,9 @@ rule make_blast_database_bacterial_genome:
 		fasta = rules.bacterial_genome.output.fasta,
 		mapping = rules.bacterial_genome.output.bacterial_accessionsmap
 	output:
-		"output/bacterial_genome_selection/bacterial_genome_selection.fa.01.nhr"
+		"output/bacterial_genome_selection/bacterial_genome_selection.fa.00.nhr"
 	run:
-		shell("makeblastdb2.8.1 -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 4")
+		shell(" makeblastdb -in {input.fasta} -dbtype nucl -taxid_map {input.mapping} -parse_seqids -blastdb_version 5")
 
 rule genbank_taxonomy_source:
     input:
