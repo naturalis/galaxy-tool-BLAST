@@ -1,4 +1,4 @@
-<tool id="blastn" name="Identify reads with blastn and find taxonomy">
+<tool id="blastn" name="Identify reads with blastn and find taxonomy" version="1.0">
     <!-- description>blastn wrapper and taxonomy finder</description-->
     <requirements>
         <requirement type="package" version="3.8.2">python</requirement>
