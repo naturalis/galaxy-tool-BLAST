@@ -107,7 +107,7 @@ def create_blast_command(query, output_name):
     else:
         outformat = args.outfmt.strip()
     base_command = ["blastn", "-query", query, "-db", args.blast_database.strip().replace(","," "),
-                    "-task", args.task.strip(), "-num_threads", "2", "-max_hsps", "1", "-perc_identity", args.identity, "-out", args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt", outformat]
+                    "-task", args.task.strip(), "-num_threads", "50", "-max_hsps", "1", "-perc_identity", args.identity, "-out", args.out_folder.strip() + "/files/" + output_name.strip(), "-outfmt", outformat]
     #the taxidlist option is not used by galaxy because blast 2.8 is still in alpha version
     #add a taxonid list parameter to the blast command
     if args.taxidlist and args.taxidlist.strip() != "none":
