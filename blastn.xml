@@ -10,7 +10,11 @@
         bash '$__tool_directory__/blastn.sh'
         $input_type.type
         $input_type.input
+        #if $database_type.type == "local"
         $database_type.database.fields.path
+        #elif $database_type.type == "user"
+        $database_type.database
+        #end if
         $task
         $max_target_seqs
         $output_format.output_format_type
