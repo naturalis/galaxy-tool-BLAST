@@ -3,7 +3,7 @@
     <requirements>
         <requirement type="package" version="3.8.2">python</requirement>
         <requirement type="package" version="1.76">biopython</requirement>
-        <requirement type="package" version="2.17.0">blast</requirement>
+        <requirement type="package" version="2.16.0">blast</requirement>
     </requirements>
     <command>
         <![CDATA[
