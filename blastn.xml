@@ -1,16 +1,21 @@
-<tool id="blastn" name="Identify reads with blastn and find taxonomy" version="1.0">
+
+<tool id="blastn" name="Identify reads with blastn and find taxonomy" version="1.3">
     <!-- description>blastn wrapper and taxonomy finder</description-->
     <requirements>
-        <requirement type="package" version="3.8.2">python</requirement>
-        <requirement type="package" version="1.76">biopython</requirement>
-        <requirement type="package" version="2.13.0">blast</requirement>
+        <requirement type="package" version="3.12.0">python</requirement>
+        <requirement type="package" version="1.85">biopython</requirement>
+        <requirement type="package" version="2.17.0">blast</requirement>
     </requirements>
     <command>
         <![CDATA[
         bash '$__tool_directory__/blastn.sh'
         $input_type.type
         $input_type.input
+        #if $database_type.type == "local"
+        $database_type.database.fields.path
+        #elif $database_type.type == "user"
         $database_type.database
+        #end if
         $task
         $max_target_seqs
         $output_format.output_format_type
@@ -49,23 +54,9 @@
         </macro>
         <macro name="local_databases">
         <param name="database" type="select" multiple="true" label="Database">
-            <option value="/data/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-16)</option>
-            <!-- <option value="/extend/blast_databases/BOLD/bold_all_sequences_taxonomy_species_only_nodups.fa" label="boldnodups">BOLD species only no duplicates</option>
-            <option value="/extend/blast_databases/genbank/nt" label="genbankfull">Genbank (2022-03-16)</option>
-            <option value="/extend/blast_databases/CO1/CO1.fa" label="genbankco1">Genbank CO1 (2022-03-16)</option>
-            <option value="/extend/blast_databases/12S/12S.fa" label="genbank12S">Genbank 12S (2022-03-16)</option>
-            <option value="/extend/blast_databases/16S/16S.fa" label="genbank16S">Genbank 16S (2022-03-16)</option>
-            <option value="/extend/blast_databases/18S/18S.fa" label="genbank18S">Genbank 18S (2022-03-16)</option>
-            <option value="/extend/blast_databases/ITS/ITS.fa" label="genbankits">Genbank ITS (2022-03-16)</option>
-            <option value="/extend/blast_databases/matK/matK.fa" label="genbankmatk">Genbank matK (2022-03-16)</option>
-            <option value="/extend/blast_databases/rbcL/rbcL.fa" label="genbankrbcl">Genbank rbcL (2022-03-16)</option>
-            <option value="/extend/blast_databases/trnl/trnl.fa" label="genbanktrnl">Genbank trnl (2022-03-16)</option>
-            <option value="/extend/blast_databases/bacterial_genome_selection/bacterial_genome_selection.fa" label="genbankbacterialgenome">Genbank bacterial genome selection (2022-03-16)</option>
-            <option value="/extend/blast_databases/UNITE/UNITE.fa" label="unite">UNITE</option>
-            <option value="/extend/blast_databases/SILVA/SILVA_138_SSUParc_tax_silva_taxonomy.fasta" label="silva">SILVA 138.1 SSUParc</option>
-            <option value="/extend/blast_databases/waterscan/waterscan.fa" label="waterscan">waterscan</option>
-            <option value="/extend/blast_databases/waterscan/filtered_waterscan.fa" label="waterscan_filter">waterscan filtered</option>
-            <option value="/extend/blast_databases/waterscan/klassev2.fa" label="klasse">Klasse</option> -->
+          <options from_data_table="naturalis_blast_databases">
+             <validator message="No BLAST database is available" type="no_options" />
+          </options>
         </param>
         </macro>
         <macro name="user_input_fasta">
@@ -126,19 +117,19 @@
     <!--<code file="/home/ubuntu/testmapMarten/test/Marten/github_scripts/galaxy-tool-BLAST/test_tool_form_utils.py"/>-->
 
     <outputs>
-        <data format="txt" type="data" name="log_output" label="$input_type.input.display_name log"/>
-        <!--<data format="tabular" type="data" name="blast_output" label="$input_type.input.display_name BLAST" />-->
-        <data format="zip" type="data" name="blast_output_zip" label="$input_type.input.display_name BLAST">
+        <data format="txt" name="log_output" label="$input_type.input.display_name log"/>
+        <!--<data format="tabular" name="blast_output" label="$input_type.input.display_name BLAST" />-->
+        <data format="zip" name="blast_output_zip" label="$input_type.input.display_name BLAST">
             <filter>input_type['type'] != "fasta"</filter>
         </data>
 
         <!-- Output with original taxonomy -->
-        <data format="tabular" type="data" name="blast_output_original" label="$input_type.input.display_name BLAST gbif taxonomy">
+        <data format="tabular" name="blast_output_original" label="$input_type.input.display_name BLAST gbif taxonomy">
             <filter>input_type['type'] == "fasta"</filter>
             <filter>output_format['taxonomy_method'] == "GBIF"</filter>
         </data>
 
-        <data format="tabular" type="data" name="blast_output_fasta" label="$input_type.input.display_name BLAST original taxonomy">
+        <data format="tabular" name="blast_output_fasta" label="$input_type.input.display_name BLAST original taxonomy">
             <filter>input_type['type'] == "fasta"</filter>
             <change_format>
                 <when input="output_format.output_format_type" value="custom_taxonomy" format="tabular"/>
@@ -148,14 +139,15 @@
                 <when input="output_format.output_format_type" value="11" format="txt"/>
             </change_format>
         </data>
+        <!-- tests upload changes -->
 
     </outputs>
-    <tests>
+    <!-- <tests>
         <test>
             <param name="test_input" value="test_input.txt"/>
             <output name="test_outout" file="test_output.txt"/>
         </test>
-    </tests>
+    </tests> -->
     <help>
     </help>
 </tool>

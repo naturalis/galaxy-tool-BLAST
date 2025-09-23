@@ -1,0 +1,13 @@
+name: naturalis_blast
+owner:  duijker.d
+description: "Identify reads with blastn and find taxonomy" 
+long_description: |
+  "An in-house blastn wrapper used by Naturalis researchesrs to Identify reads and find taxonomy".
+remote_repository_url: https://github.com/naturalis/galaxy-tool-BLAST.git
+homepage_url: https://github.com/naturalis/galaxy-tool-BLAST.git
+type: unrestricted
+categories:
+   - "Sequence Analysis"
+auto_tool_repositories:
+  name_template: naturalis_blast
+  description_template: naturalis_blast
