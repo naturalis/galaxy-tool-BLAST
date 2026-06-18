@@ -221,7 +221,7 @@ BOLD_PREFIX_MAP = {
 }
 RANK_ORDER = ["kingdom", "phylum", "class", "order", "family", "genus", "species"]
 
-TAXONKIT_FORMAT = "{kingdom}\t/\t{phylum}\t/\t{class}\t/\t{order}\t/\t{family}\t/\t{genus}\t/\t{species}"
+TAXONKIT_FORMAT = "{kingdom} / {phylum} / {class} / {order} / {family} / {genus} / {species}"
 
 
 def _is_bold_unite(subject_title):
@@ -289,7 +289,7 @@ def _parse_silva(subject_title):
         # Pad missing trailing ranks with "None"
         seven = tokens + ["None"] * (7 - depth)
     result = [v if v else "None" for v in seven]
-    return "\t/\t".join(result)
+    return " / ".join(result)
 
 
 def _parse_bold_unite(subject_title):
@@ -307,7 +307,7 @@ def _parse_bold_unite(subject_title):
                 if value.lower() != "none":
                     ranks[rank] = value
                 break
-    return "\t/\t".join(ranks[r] for r in RANK_ORDER)
+    return " / ".join(ranks[r] for r in RANK_ORDER)
 
 
 def _taxonkit_lineage(taxids):
