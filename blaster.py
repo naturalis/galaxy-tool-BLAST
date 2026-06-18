@@ -256,6 +256,7 @@ def _detect_source(accession):
     return "Unknown"
 
 
+
 def _parse_silva(subject_title):
     """
     Parse a SILVA subject title into the 7-rank taxonomy string.
@@ -263,6 +264,10 @@ def _parse_silva(subject_title):
       1. 'silva|accession|Domain;Phylum;Class;Order;Family;Genus;Species'  (pipe-delimited)
       2. '<accession> Domain;Phylum;Class;Order;Family;Genus;Species'       (space-delimited)
     Ranks are positional (no prefixes): index 0=kingdom, 1=phylum, ... 6=species.
+
+    When the taxonomy string contains more than 7 levels (common in SILVA), the
+    first 4 broad ranks and the last 3 specific ranks are kept, following the
+    strategy from https://gist.github.com/walterst/9ddb926fece4b7c0e12c.
     """
     s = subject_title.strip()
     pipe_parts = s.split("|")
@@ -273,11 +278,17 @@ def _parse_silva(subject_title):
         # Space-delimited: strip leading accession token if present
         space_parts = s.split(" ", 1)
         tax_str = space_parts[1] if len(space_parts) == 2 else space_parts[0]
-    tokens = [t.strip() for t in tax_str.split(";")]
-    result = []
-    for i in range(7):
-        val = tokens[i] if i < len(tokens) and tokens[i] else "None"
-        result.append(val)
+    tokens = [t.strip() for t in tax_str.split(";") if t.strip()]
+    depth = len(tokens)
+    if depth == 7:
+        seven = tokens
+    elif depth > 7:
+        # Keep first 4 broad ranks + last 3 specific ranks
+        seven = tokens[0:4] + tokens[depth - 3:depth]
+    else:
+        # Pad missing trailing ranks with "None"
+        seven = tokens + ["None"] * (7 - depth)
+    result = [v if v else "None" for v in seven]
     return "\t/\t".join(result)
 
 
