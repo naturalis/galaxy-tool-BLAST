@@ -62,6 +62,11 @@ parser.add_argument("--taxdump",                          dest="taxdump",       
                     default=None,
                     help="Path to taxdump directory for taxonkit taxonomy annotation. "
                          "When provided, appends a #Taxonomy column to the final output.")
+parser.add_argument("--silva_taxmap",                     dest="silva_taxmap",         type=str, required=False,
+                    default=None,
+                    help="Path to a SILVA taxmap file (e.g. taxmap_slv_ssu_ref_nr_138.txt). "
+                         "Maps SILVA accession+range keys (e.g. AF190453.1.1847) to NCBI "
+                         "taxids so that SILVA hits can be annotated via taxonkit.")
 args = parser.parse_args()
 
 # Validate: BLAST-specific args are required unless --annotate_only is set
@@ -72,6 +77,9 @@ if args.annotate_only is None:
                if getattr(args, name) is None]
     if missing:
         parser.error(f"The following arguments are required when not using --annotate_only: {', '.join(missing)}")
+
+if args.silva_taxmap is not None and not os.path.isfile(args.silva_taxmap):
+    parser.error(f"--silva_taxmap path does not exist: {args.silva_taxmap}")
 
 # Derive max_parallel from max_cpus if --parallel was not explicitly provided
 if args.max_parallel is None:
@@ -256,46 +264,62 @@ def _detect_source(accession):
     return "Unknown"
 
 
+def _silva_acc_from_subject(subject):
+    """Extract the 'accession.start.stop' key from a SILVA subject title.
 
-def _parse_silva(subject_title):
+    e.g. 'silva|AF190453.1.1847|Eukaryota;...' -> 'AF190453.1.1847'
     """
-    Parse a SILVA subject title into the 7-rank taxonomy string.
-    Supports two formats:
-      1. 'silva|accession|Domain;Phylum;Class;Order;Family;Genus;Species'  (pipe-delimited)
-      2. '<accession> Domain;Phylum;Class;Order;Family;Genus;Species'       (space-delimited)
-    Ranks are positional (no prefixes): index 0=kingdom, 1=phylum, ... 6=species.
+    pipe_parts = subject.strip().split("|")
+    if len(pipe_parts) >= 2 and pipe_parts[0].lower() == "silva":
+        return pipe_parts[1]
+    # Fallback: first whitespace-delimited token
+    tokens = subject.strip().split()
+    return tokens[0] if tokens else ""
 
-    When the taxonomy string contains more than 7 levels (common in SILVA), the
-    first 4 broad ranks and the last 3 specific ranks are kept, following the
-    strategy from https://gist.github.com/walterst/9ddb926fece4b7c0e12c.
+
+_SILVA_TAXMAP: dict | None = None
+
+
+def _load_silva_taxmap():
+    """Lazily load a SILVA taxmap file into {accession.start.stop: ncbi_taxid}.
+
+    Expected format (tab-separated, with header):
+      primaryAccession  start  stop  path  organism_name  taxid
+    The lookup key is built as 'primaryAccession.start.stop' to match the
+    accession field embedded in SILVA subject titles (e.g. AF190453.1.1847).
+    Returns an empty dict when --silva_taxmap is not provided.
     """
-    s = subject_title.strip()
-    pipe_parts = s.split("|")
-    if len(pipe_parts) >= 3 and pipe_parts[0].lower() == "silva":
-        # Pipe-delimited: silva|accession|taxonomy
-        tax_str = pipe_parts[2]
-    else:
-        # Space-delimited: strip leading accession token if present
-        space_parts = s.split(" ", 1)
-        tax_str = space_parts[1] if len(space_parts) == 2 else space_parts[0]
-    tokens = [t.strip() for t in tax_str.split(";") if t.strip()]
-    depth = len(tokens)
-    if depth == 7:
-        seven = tokens
-    elif depth > 7:
-        # Keep first 4 broad ranks + last 3 specific ranks
-        seven = tokens[0:4] + tokens[depth - 3:depth]
-    else:
-        # Pad missing trailing ranks with "None"
-        seven = tokens + ["None"] * (7 - depth)
-    result = [v if v else "None" for v in seven]
-    return " / ".join(result)
+    global _SILVA_TAXMAP
+    if _SILVA_TAXMAP is not None:
+        return _SILVA_TAXMAP
+    _SILVA_TAXMAP = {}
+    if not args.silva_taxmap:
+        return _SILVA_TAXMAP
+    try:
+        with open(args.silva_taxmap) as fh:
+            for line in fh:
+                line = line.rstrip("\n")
+                if not line or line.startswith("primaryAccession"):
+                    continue  # skip empty lines and the header row
+                cols = line.split("\t")
+                if len(cols) < 6:
+                    continue
+                # cols: primaryAccession, start, stop, path, organism_name, taxid
+                acc_key = f"{cols[0].strip()}.{cols[1].strip()}.{cols[2].strip()}"
+                taxid   = cols[5].strip()
+                if taxid.isdigit():
+                    _SILVA_TAXMAP[acc_key] = taxid
+        log(out=f"Loaded {len(_SILVA_TAXMAP)} SILVA taxmap entries from {args.silva_taxmap}",
+            function="load_silva_taxmap")
+    except Exception as exc:
+        log(error=f"Failed to load SILVA taxmap: {exc}", function="load_silva_taxmap")
+    return _SILVA_TAXMAP
 
 
 def _parse_bold_unite(subject_title):
     """
     Parse a semicolon-separated BOLD/UNITE taxonomy string into the 7-rank
-    format: kingdom\t/\tphylum\t/\tclass\t/\torder\t/\tfamily\t/\tgenus\t/\tspecies
+    format: kingdom / phylum / class / order / family / genus / species
     Ranks absent or set to 'None' are returned as empty string.
     """
     ranks = {r: "" for r in RANK_ORDER}
@@ -344,7 +368,10 @@ def add_taxonomy(tabular_path):
     - BOLD/UNITE rows (stitle contains 'k__'): taxonomy parsed directly from stitle.
     - GenBank rows (numeric staxid): taxonomy resolved via taxonkit.
     """
-    # First pass: scan to decide which strategy each row needs
+    # Load SILVA taxmap once (no-op if --silva_taxmap not provided)
+    silva_taxmap = _load_silva_taxmap()
+
+    # First pass: collect all NCBI taxids needed for taxonkit
     ncbi_taxids = set()
     with open(tabular_path, "r") as fh:
         for line in fh:
@@ -352,8 +379,15 @@ def add_taxonomy(tabular_path):
                 continue
             parts = line.rstrip("\n").split("\t")
             subject = parts[SUBJECT_COL] if len(parts) > SUBJECT_COL else ""
+            acc     = parts[ACC_COL].strip() if len(parts) > ACC_COL else ""
             taxid   = parts[TAXID_COL].strip() if len(parts) > TAXID_COL else ""
-            if not _is_bold_unite(subject) and taxid.isdigit():
+            if _is_bold_unite(subject):
+                pass  # taxonomy parsed inline, no taxonkit needed
+            elif _detect_source(acc) == "SILVA" and silva_taxmap:
+                resolved = silva_taxmap.get(_silva_acc_from_subject(subject))
+                if resolved:
+                    ncbi_taxids.add(resolved)
+            elif taxid.isdigit():
                 ncbi_taxids.add(taxid)
 
     # Resolve NCBI taxids via taxonkit only when needed
@@ -366,55 +400,46 @@ def add_taxonomy(tabular_path):
                 function="add_taxonomy")
 
     # Second pass: rewrite with appended source + taxonomy
+    # cut_col: index at which to slice rows before appending fresh Source+Taxonomy.
+    # Determined from the header; None means the columns don't exist yet.
+    cut_col = None
     annotated = tabular_path + "_tax"
-    source_col_idx = None
-    taxonomy_col_idx = None
-    
+
     with open(tabular_path, "r") as src, open(annotated, "w") as dst:
         for line in src:
             if line.startswith("#"):
-                # Detect existing Source and Taxonomy columns from header
                 header_parts = line.rstrip("\n").split("\t")
-                source_col_idx = None
-                taxonomy_col_idx = None
+                # Find the leftmost of #Source / #Taxonomy to use as the cut point
                 for i, col in enumerate(header_parts):
-                    if col == "#Source":
-                        source_col_idx = i
-                    elif col == "#Taxonomy":
-                        taxonomy_col_idx = i
-                
-                # Reconstruct header: remove existing Source/Taxonomy columns if present
-                new_header = []
-                for i, col in enumerate(header_parts):
-                    if i != source_col_idx and i != taxonomy_col_idx:
-                        new_header.append(col)
-                dst.write("\t".join(new_header) + "\t#Source\t#Taxonomy\n")
+                    if col in ("#Source", "#Taxonomy"):
+                        cut_col = i
+                        break
+                base_header = header_parts[:cut_col] if cut_col is not None else header_parts
+                dst.write("\t".join(base_header) + "\t#Source\t#Taxonomy\n")
                 continue
-            
+
             parts = line.rstrip("\n").split("\t")
             subject = parts[SUBJECT_COL] if len(parts) > SUBJECT_COL else ""
             acc     = parts[ACC_COL].strip() if len(parts) > ACC_COL else ""
             taxid   = parts[TAXID_COL].strip() if len(parts) > TAXID_COL else ""
-            source   = _detect_source(acc)
+            source  = _detect_source(acc)
             if _is_bold_unite(subject):
                 taxonomy = _parse_bold_unite(subject)
             elif source == "SILVA":
-                taxonomy = _parse_silva(subject)
+                resolved_taxid = silva_taxmap.get(_silva_acc_from_subject(subject))
+                taxonomy = taxid_to_lineage.get(resolved_taxid, "") if resolved_taxid else ""
             else:
                 taxonomy = taxid_to_lineage.get(taxid, "")
             if not taxonomy:
                 taxonomy = "None"
             else:
-                taxonomy = "\t/\t".join(
-                    p if p.strip() else "None" for p in taxonomy.split("\t/\t")
+                taxonomy = " / ".join(
+                    p if p.strip() else "None" for p in taxonomy.split(" / ")
                 )
-            
-            # Reconstruct row: remove existing Source/Taxonomy columns if present
-            new_parts = []
-            for i, part in enumerate(parts):
-                if i != source_col_idx and i != taxonomy_col_idx:
-                    new_parts.append(part)
-            dst.write("\t".join(new_parts) + "\t" + source + "\t" + taxonomy + "\n")
+
+            # Always overwrite: slice off any existing Source/Taxonomy columns
+            base_parts = parts[:cut_col] if cut_col is not None else parts
+            dst.write("\t".join(base_parts) + "\t" + source + "\t" + taxonomy + "\n")
     os.replace(annotated, tabular_path)
     log(out=f"Taxonomy annotation complete -> {tabular_path}", function="add_taxonomy")
 
