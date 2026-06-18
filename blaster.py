@@ -171,9 +171,11 @@ def run_blast_chunk(chunk_path):
     cmd = build_blast_command(chunk_path, output_path)
 
     log(out=f"Running: {' '.join(cmd)}", function=f"blast:{chunk_name}")
-    out, err = Popen(cmd, stdout=PIPE, stderr=PIPE).communicate()
-    log(out=out.decode() if out else None, error=err if err else None,
-        function=f"blast:{chunk_name}")
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    out, err = proc.communicate()
+    log(out=out.decode() if out else None, error=err if err else None, function=f"blast:{chunk_name}")
+    if proc.returncode != 0:
+        raise RuntimeError(f"blastn failed for {chunk_name} (exit code {proc.returncode})")
     return output_path
 
 
