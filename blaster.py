@@ -10,7 +10,6 @@ import sys
 import os
 import re
 import argparse
-import glob
 from Bio import SeqIO
 from subprocess import Popen, PIPE
 from concurrent.futures import ThreadPoolExecutor, as_completed
