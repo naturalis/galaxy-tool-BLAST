@@ -341,6 +341,7 @@ def _taxonkit_lineage(taxids):
                    "--data-dir", args.taxdump]
     reformat_cmd = ["taxonkit", "reformat2",
                     "--format", TAXONKIT_FORMAT,
+                    "-r", "unclassified", "-R", "Missing TaxID",
                     "--data-dir", args.taxdump]
 
     p1 = Popen(lineage_cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
