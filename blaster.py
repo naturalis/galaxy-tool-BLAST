@@ -52,7 +52,7 @@ parser.add_argument("-p",   "--parallel",             dest="max_parallel",      
                     help="Maximum number of parallel BLAST jobs. Overrides --max_cpus if set.")
 parser.add_argument("-num_threads", "--num_threads",      dest="num_threads",          type=int, required=False,
                     default=1,
-                    help="Number of threads per BLAST job (default: 2)")
+                    help="Number of threads per BLAST job (default: 1)")
 parser.add_argument("--max_cpus",                         dest="max_cpus",             type=int, required=False,
                     default=None,
                     help="Total CPUs available (e.g. Galaxy job allocation). "
