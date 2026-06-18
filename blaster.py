@@ -460,7 +460,7 @@ def main():
             except Exception as exc:
                 log(error=f"Chunk {chunk} raised an exception: {exc}", function="main")
 
-    if args.coverage and args.outfmt.strip() == "custom_taxonomy":
+    if args.outfmt.strip() == "custom_taxonomy" and float(args.coverage) > 0:
         for path in result_files:
             if os.path.isfile(path):
                 coverage_filter(path)
