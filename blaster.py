@@ -14,6 +14,7 @@ import glob
 from Bio import SeqIO
 from subprocess import Popen, PIPE
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import gzip
 
 # ---------------------------------------------------------------------------
 # CLI arguments (mirrors blastn_wrapper.py so the shell wrapper can call both)
@@ -338,7 +339,13 @@ def _load_silva_taxmap():
     if not args.silva_taxmap:
         return _SILVA_TAXMAP
     try:
-        with open(args.silva_taxmap) as fh:
+        # Check if the file ends with .gz to choose the correct opener
+        if args.silva_taxmap.endswith(".gz"):
+            file_opener = gzip.open(args.silva_taxmap, "rt", encoding="utf-8")
+        else:
+            file_opener = open(args.silva_taxmap, "r", encoding="utf-8")
+
+        with file_opener as fh:
             for line in fh:
                 line = line.rstrip("\n")
                 if not line or line.startswith("primaryAccession"):
