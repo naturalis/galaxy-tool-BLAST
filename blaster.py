@@ -67,7 +67,25 @@ parser.add_argument("--silva_taxmap",                     dest="silva_taxmap",  
                     help="Path to a SILVA taxmap file (e.g. taxmap_slv_ssu_ref_nr_138.txt). "
                          "Maps SILVA accession+range keys (e.g. AF190453.1.1847) to NCBI "
                          "taxids so that SILVA hits can be annotated via taxonkit.")
+parser.add_argument("--marker",                           dest="marker",               type=str, required=False,
+                    default=None, choices=["16S", "18S", "ITS", "CO1"],
+                    help="Marker being processed. Used together with --16S_backbone / --18S_backbone "
+                         "to select the taxonomy backbone for SILVA hits.")
+parser.add_argument("--16S_backbone",                     dest="backbone_16S",         type=str, required=False,
+                    default="silva", choices=["silva", "ncbi"],
+                    help="Taxonomy backbone for 16S SILVA hits. "
+                         "'silva' (default): parse taxonomy directly from the SILVA subject title. "
+                         "'ncbi': resolve NCBI lineage via taxonkit (requires --taxdump and --silva_taxmap).")
+parser.add_argument("--18S_backbone",                     dest="backbone_18S",         type=str, required=False,
+                    default="ncbi", choices=["silva", "ncbi"],
+                    help="Taxonomy backbone for 18S SILVA hits. "
+                         "'ncbi' (default): resolve NCBI lineage via taxonkit (requires --taxdump and --silva_taxmap). "
+                         "'silva': parse taxonomy directly from the SILVA subject title.")
 args = parser.parse_args()
+
+# Resolve the effective backbone for SILVA hits based on --marker
+_BACKBONE_MAP = {"16S": args.backbone_16S, "18S": args.backbone_18S}
+SILVA_BACKBONE = _BACKBONE_MAP.get(args.marker, args.backbone_16S)  # default to 16S backbone if marker unset
 
 # Validate: BLAST-specific args are required unless --annotate_only is set
 if args.annotate_only is None:
@@ -264,6 +282,30 @@ def _detect_source(accession):
     return "Unknown"
 
 
+def _parse_silva_subject(subject):
+    """Parse taxonomy directly from a SILVA subject title semicolon path.
+
+    Expected subject format: 'silva|accession|Kingdom;Phylum;...;species'
+    Returns the 7-rank string 'kingdom / phylum / class / order / family / genus / species'.
+    Missing ranks are filled with 'unknown <rank>'.
+    """
+    try:
+        tax_path = subject.split("|")[-1]
+        parts = [p.strip() for p in tax_path.split(";")]
+        species = parts[-1] if parts else ""
+        if species.lower() == "unidentified":
+            species = "unknown species"
+        ranks = parts[:-1]
+        unknowns = ["unknown kingdom", "unknown phylum", "unknown class",
+                    "unknown order", "unknown family", "unknown genus"]
+        while len(ranks) < 6:
+            ranks.append(unknowns[len(ranks)])
+        ranks.append(species)
+        return " / ".join(ranks[:7])
+    except Exception:
+        return "None"
+
+
 def _silva_acc_from_subject(subject):
     """Extract the 'accession.start.stop' key from a SILVA subject title.
 
@@ -367,7 +409,9 @@ def add_taxonomy(tabular_path):
     Append a #Taxonomy column to *tabular_path* in-place.
 
     - BOLD/UNITE rows (stitle contains 'k__'): taxonomy parsed directly from stitle.
-    - GenBank rows (numeric staxid): taxonomy resolved via taxonkit.
+    - SILVA rows: parsed from subject title when backbone is 'silva' (default for 16S),
+      or resolved via taxonkit when backbone is 'ncbi' (default for 18S).
+    - GenBank/RefSeq rows (numeric staxid): taxonomy resolved via taxonkit.
     """
     # Load SILVA taxmap once (no-op if --silva_taxmap not provided)
     silva_taxmap = _load_silva_taxmap()
@@ -384,10 +428,12 @@ def add_taxonomy(tabular_path):
             taxid   = parts[TAXID_COL].strip() if len(parts) > TAXID_COL else ""
             if _is_bold_unite(subject):
                 pass  # taxonomy parsed inline, no taxonkit needed
-            elif _detect_source(acc) == "SILVA" and silva_taxmap:
-                resolved = silva_taxmap.get(_silva_acc_from_subject(subject))
-                if resolved:
-                    ncbi_taxids.add(resolved)
+            elif _detect_source(acc) == "SILVA":
+                if SILVA_BACKBONE == "ncbi" and silva_taxmap:
+                    resolved = silva_taxmap.get(_silva_acc_from_subject(subject))
+                    if resolved:
+                        ncbi_taxids.add(resolved)
+                # silva backbone: taxonomy parsed inline from subject title, no taxonkit needed
             elif taxid.isdigit():
                 ncbi_taxids.add(taxid)
 
@@ -427,8 +473,11 @@ def add_taxonomy(tabular_path):
             if _is_bold_unite(subject):
                 taxonomy = _parse_bold_unite(subject)
             elif source == "SILVA":
-                resolved_taxid = silva_taxmap.get(_silva_acc_from_subject(subject))
-                taxonomy = taxid_to_lineage.get(resolved_taxid, "") if resolved_taxid else ""
+                if SILVA_BACKBONE == "ncbi":
+                    resolved_taxid = silva_taxmap.get(_silva_acc_from_subject(subject))
+                    taxonomy = taxid_to_lineage.get(resolved_taxid, "") if resolved_taxid else ""
+                else:
+                    taxonomy = _parse_silva_subject(subject)
             else:
                 taxonomy = taxid_to_lineage.get(taxid, "")
             if not taxonomy:
