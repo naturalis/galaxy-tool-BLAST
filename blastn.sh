@@ -3,16 +3,6 @@
 outlocation=$(mktemp -d /data/files/XXXXXX)
 SCRIPTDIR=$(dirname "$(readlink -f "$0")")
 
-# sanity check
-printf "Conda env: $CONDA_DEFAULT_ENV\n"
-printf "Outlocation: $outlocation\n"
-printf "Python version: $(python --version |  awk '{print $2}')\n"
-printf "Biopython version: $(conda list | egrep biopython | awk '{print $2}')\n"
-printf "Blastn version: $(blastn -version | head -n1 | awk '{print $2}')\n"
-printf "Unzip version: $(unzip -v | head -n1 | awk '{print $2}')\n"
-printf "Bash version: ${BASH_VERSION}\n"
-printf "SCRIPTDIR: $SCRIPTDIR\n\n"
-
 python $SCRIPTDIR"/blastn_wrapper.py" -it $1 -i $2 -db $3 -bt $4 -bm $5 -of $outlocation -outfmt $6 -cov "${10}" -id "${11}" -dbt "${13}"
 
 #below the code for moving the files to the galaxy output, when no taxonomy need to be added
