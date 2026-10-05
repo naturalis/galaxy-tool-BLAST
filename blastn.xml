@@ -1,10 +1,11 @@
 
-<tool id="blastn" name="Identify reads with blastn and find taxonomy" version="1.5">
+<tool id="blastn" name="Identify reads with blastn and find taxonomy" version="1.6">
     <!-- description>blastn wrapper and taxonomy finder</description-->
     <requirements>
         <requirement type="package" version="3.12.0">python</requirement>
         <requirement type="package" version="1.85">biopython</requirement>
         <requirement type="package" version="2.17.0">blast</requirement>
+        <container type="docker">ghcr.io/naturalis/galaxy-tool-blast:v1</container>
     </requirements>
     <command>
         <![CDATA[
